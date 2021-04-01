@@ -14,4 +14,6 @@ router.post('/add', passPort.authenticate('jwt',{session: false}), apartControll
 
 router.put('/update', passPort.authenticate('jwt',{session: false}), apartController.updateApartment);
 
+router.delete('/delete/:apart_id', passPort.authenticate('jwt',{session: false}), apartController.deleteApartment);
+
 module.exports = router;

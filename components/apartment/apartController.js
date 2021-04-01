@@ -54,3 +54,17 @@ module.exports.updateApartment = async (req, res, next) =>{
         res.status(500).json(error);
     }
 }
+module.exports.deleteApartment = async (req, res, next) =>{
+    try {
+        const {apart_id} = req.params;
+        const apart = await apartServices.deleteApartment(apart_id);
+        if(apart.is_delete==true){
+            res.status(200).json();
+        }else{
+            res.status(500).json({message: "Cann't delete!"});
+        }
+    } catch (error) {
+        console.log("errors: ", error);
+        res.status(500).json(error);
+    }
+}

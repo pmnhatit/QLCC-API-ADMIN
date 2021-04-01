@@ -52,7 +52,7 @@ module.exports.updateTokenDevice = async (user_id, token_device) =>{
     })
 } 
 module.exports.changePassword = async (user_id, password) =>{
-    // mongoose.set('useFindAndModify', false);
+    mongoose.set('useFindAndModify', false);
     let hash = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
     const result = await authModel.findByIdAndUpdate({'_id': user_id},
     {'password': hash},

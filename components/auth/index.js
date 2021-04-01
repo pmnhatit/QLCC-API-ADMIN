@@ -5,7 +5,7 @@ const passPort = require('../../services/passport');
 const authController = require('./authController')
 const author = require('../../middleware/authorization');
 
-router.get('/all', passPort.authenticate('jwt',{session: false}), author, authController.getAllUser);
+router.get('/all', passPort.authenticate('jwt',{session: false}), authController.getAllUser);
 
 router.post('/login',passPort.authenticate('local',{session: false}), authController.login);
 
@@ -19,6 +19,6 @@ router.put('/update-token-device', passPort.authenticate('jwt',{session: false})
 
 router.put('/change-pass', passPort.authenticate('jwt',{session: false}), authController.changePassword);
 
-router.delete('/delete', passPort.authenticate('jwt',{session: false}), author, authController.deleteUser);
+router.delete('/delete/:user_id', passPort.authenticate('jwt',{session: false}), author, authController.deleteUser);
 
 module.exports = router;

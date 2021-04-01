@@ -33,7 +33,7 @@ module.exports.createApartment = async (name, block, area, direction, type, imag
 //UPDATE
 module.exports.updateApartment = async (apart_id, name, block, area, direction, type, images, description) =>{
     mongoose.set('useFindAndModify', false);
-    const new_apart = await apartmentModel.findOneAndUpdate({'_id': apart_id},
+    const new_apart = await apartmentModel.findByIdAndUpdate({'_id': apart_id},
     {'name': name, 'block': block, 'area': area, 'direction': direction, 'type': type, 'image': images, 'description': description},
     {
         new: true
@@ -41,3 +41,12 @@ module.exports.updateApartment = async (apart_id, name, block, area, direction, 
     return new_apart;
 }
 //DELETE
+module.exports.deleteApartment = async (apart_id) =>{
+    mongoose.set('useFindAndModify', false);
+    const result = await apartmentModel.findByIdAndUpdate({'_id': apart_id},
+    {'is_delete': true},
+    {
+        new: true
+    });
+    return result;
+}

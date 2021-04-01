@@ -102,7 +102,7 @@ module.exports.changePassword = async (req, res, next) =>{
 //DELETE
 module.exports.deleteUser = async (req, res, next) =>{
     try {
-        const {user_id} = req.body;
+        const {user_id} = req.params;
         const user = await authServices.deleteUser(user_id);
         if(user.is_delete==true){
             res.status(200).json()
