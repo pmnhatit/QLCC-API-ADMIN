@@ -7,7 +7,6 @@ jwtOptions.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
 jwtOptions.secretOrKey = process.env.KEY_SECRET;
 
 const authServices = require('./authServices');
-const apartmentServices = require('../apartment/apartServices');
 
 module.exports.login = async (req, res, next) =>{
     const user = req.user;
@@ -25,6 +24,7 @@ module.exports.login = async (req, res, next) =>{
         res.json({token: token, infoUser: infoUser});
     }
 }
+//CREATE
 module.exports.createUser = async(req, res , next) => {
     try {
         const {username, password, name, phone, email} = req.body;
@@ -47,16 +47,6 @@ module.exports.createUser = async(req, res , next) => {
     }
 }
 //GET
-module.exports.getAllUserByBlockId = async (req, res, next) =>{
-    try {
-        const {block_id} = req.params;
-        const users = await authServices.getAllUserByBlockId(block_id);
-        res.status(200).json({data: users});
-    } catch (error) {
-        console.log("errors: ",error);
-        res.status(500).json(error);
-    }
-}
 module.exports.getAllUser = async (req, res, next) =>{
     try {
         const users = await authServices.getAllUser();
@@ -69,23 +59,9 @@ module.exports.getAllUser = async (req, res, next) =>{
 //UPDATE
 module.exports.updateInfo = async (req, res, next) =>{
     try {
-        const {name, phone, email, identify_card, native_place, user_id} = req.body;
-        const user = await authServices.updateInfo(user_id, name, phone, email, identify_card, native_place);
-        //const user = await authServices.getUserById(user_id);
-        let apart_names = [];
-        if(user.apartment_id[0]==""){
-            apart_names[0] = "";
-        }else{
-            for(let i=0; i<user.apartment_id.length; i++){
-                const apart_name = await apartmentServices.getApartmentById(user.apartment_id[i]);
-                apart_names[i] = apart_name.name;
-            }
-        }
-        const newInfo = {id: user._id, username: user.username, name: user.name, phone: user.phone, email: user.email, 
-            identify_card: user.identify_card, native_place: user.native_place, block_id: user.block_id, 
-            apartment_id: user.apartment_id, apartment_name: apart_names, avatar: user.avatar, 
-            auth: user.auth, token_device: user.token_device}
-        res.json({data: newInfo});
+        const {name, phone, email, user_id} = req.body;
+        const user = await authServices.updateInfo(user_id, name, phone, email);
+        res.status(200).json({data: user});
     } catch (error) {
         console.log("error: ",error);
         res.status(500).json({error});
@@ -113,13 +89,29 @@ module.exports.updateTokenDevice = async (req, res, next) =>{
         res.status(500).json(error);
     }
 }
-// module.exports.updateBlockId = async (req, res, next) =>{
-//     try {
-//         const {user_id, block_id} = req.body;
-//         const new_user = await authServices.updateBlockId(user_id, block_id);
-//         res.status(200).json({data: new_user});
-//     } catch (error) {
-//         console.log("error: ", error);
-//         res.status(500).json(error);
-//     }
-// }
+module.exports.changePassword = async (req, res, next) =>{
+    try {
+        const {user_id, new_pass} = req.body;
+        const user = await authServices.changePassword(user_id, new_pass);
+        res.status(200).json({data: user});
+    } catch (error) {
+        console.log("errors: ",error);
+        res.status(500).json(error);
+    }
+}
+//DELETE
+module.exports.deleteUser = async (req, res, next) =>{
+    try {
+        const {user_id} = req.body;
+        const user = await authServices.deleteUser(user_id);
+        if(user.is_delete==true){
+            res.status(200).json()
+        }else{
+            res.status(500).json({message: "Cann't delete!"});
+        }
+        
+    } catch (error) {
+        console.log("errors: ",error);
+        res.status(500).json(error);
+    }
+}

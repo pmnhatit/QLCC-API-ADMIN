@@ -11,11 +11,7 @@ module.exports.getUserById = async (user_id) =>{
     return result;
 }
 module.exports.getAllUser = async ()=>{
-    const result = await authModel.find({'auth': 2, 'is_delete': false});
-    return result;
-}
-module.exports.getAllUserByBlockId = async (block_id) =>{
-    const result = await authModel.find({'block_id': block_id, 'is_delete': false});
+    const result = await authModel.find({'role': 1, 'is_delete': false});
     return result;
 }
 //CREATE
@@ -36,13 +32,13 @@ module.exports.updateAvatar = async (user_id, avatar)=>{
         }
     })
 }
-module.exports.updateInfo = async (user_id, name, phone, email, identify_card, native_place) =>{
+module.exports.updateInfo = async (user_id, name, phone, email) =>{
     mongoose.set('useFindAndModify', false);
     const result = await authModel.findOneAndUpdate({'_id': user_id}, 
-    {$set:{'name': name, 'phone': phone, 'email': email, 'identify_card': identify_card, 'native_place': native_place}},
+    {$set:{'name': name, 'phone': phone, 'email': email}},
     {
         new: true
-    })
+    });
     return result;
 }
 module.exports.updateTokenDevice = async (user_id, token_device) =>{
@@ -55,13 +51,23 @@ module.exports.updateTokenDevice = async (user_id, token_device) =>{
         }
     })
 } 
-// module.exports.updateBlockId = async (user_id, block_id) =>{
-//     mongoose.set('useFindAndModify', false);
-//     const result = await authModel.findOneAndUpdate({'_id': user_id}, 
-//     {$set:{'block_id': block_id}},
-//     {
-//         new: true
-//     })
-//     return result;
-// }
+module.exports.changePassword = async (user_id, password) =>{
+    // mongoose.set('useFindAndModify', false);
+    let hash = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+    const result = await authModel.findByIdAndUpdate({'_id': user_id},
+    {'password': hash},
+    {
+        new:true
+    });
+    return result;
+}
 //DELETE
+module.exports.deleteUser = async (user_id) =>{
+    mongoose.set('useFindAndModify', false);
+    const result = await authModel.findOneAndUpdate({'_id': user_id}, 
+    {$set:{'is_delete': true}},
+    {
+        new: true
+    });
+    return result;
+}

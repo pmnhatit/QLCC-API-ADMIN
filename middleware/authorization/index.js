@@ -1,4 +1,5 @@
 const author = (req, res, next) =>{
+    console.log(req.user);
     if(req.user.role==0){
         next();
     }else{
