@@ -1,5 +1,5 @@
 const notiModel = require('./notification');
-const authServices = require('../auth/authServices');
+const userServices = require('../user/userServices');
 //GET
 module.exports.getAllNotification = async (page, limit)=>{
     const sk = (page-1)*limit;
@@ -26,7 +26,7 @@ module.exports.getNotificationByUserId = async (user_id, page, limit) =>{
 module.exports.createNotification = async (title, content, image, link, type) =>{
     let receivers = [];
     if(type==="0"){
-        const users = await authServices.getAllUser();
+        const users = await userServices.getAllUser();
         for(let i=0; i<users.length; i++){
             const receiver = {
                 user_id: users[i]._id            
@@ -34,7 +34,7 @@ module.exports.createNotification = async (title, content, image, link, type) =>
             receivers.push(receiver);
         }
     }else{
-        const users = await authServices.getAllUserByBlockId(type);
+        const users = await userServices.getAllUserByBlockId(type);
         for(let i=0; i<users.length; i++){
             const receiver = {
                 user_id: users[i]._id            
