@@ -6,8 +6,10 @@ const notiController = require('./notiController');
 
 router.get('/all/:page/:limit', passPort.authenticate('jwt',{session: false}), notiController.getAllNotification);
 
-router.get('/user/:user_id/:page/:limit',passPort.authenticate('jwt',{session: false}), notiController.getNotificationByUserId);
-
 router.post('/add', passPort.authenticate('jwt',{session: false}), notiController.createNotification);
+
+router.put('/update', passPort.authenticate('jwt',{session: false}), notiController.updateNotification);
+
+router.delete('/delete/:noti_id', passPort.authenticate('jwt',{session: false}), notiController.deleteNotification);
 
 module.exports = router;

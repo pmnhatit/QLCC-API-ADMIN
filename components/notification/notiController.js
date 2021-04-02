@@ -10,16 +10,6 @@ module.exports.getAllNotification = async (req, res, next) =>{
         res.status(500).json(error);
     }
 }
-module.exports.getNotificationByUserId = async (req, res, next) =>{
-    try {
-        const {user_id, page, limit} = req.params;
-        const notices = await notiServices.getNotificationByUserId(user_id, page, limit);
-        res.status(200).json({data: notices})
-    } catch (error) {
-        console.log("errors: ", error);
-        res.status(500).json(500);
-    }
-}
 //CREATE
 module.exports.createNotification = async (req, res, next) =>{
     try {
@@ -27,6 +17,32 @@ module.exports.createNotification = async (req, res, next) =>{
         const newNoti = await notiServices.createNotification(title, content, image, link, type);
         // console.log("new: ",newNoti);
         res.status(200).json({data: newNoti});
+    } catch (error) {
+        console.log("errors: ", error);
+        res.status(500).json(error);
+    }
+}
+//UPDATE
+module.exports.updateNotification = async (req, res, next) =>{
+    try {
+        const {noti_id, title, content, image, link} = req.body;
+        const noti = await notiServices.updateNotification(noti_id, title, content, image, link);
+        res.status(200).json({data: noti});
+    } catch (error) {
+        console.log("errors: ", error);
+        res.status(500).json(error);
+    }
+}
+//DELETE
+module.exports.deleteNotification = async (req, res, next) =>{
+    try {
+        const {noti_id} = req.params;
+        const noti = await notiServices.deleteNotification(noti_id);
+        if(noti.is_delete==true){
+            res.status(200).json();
+        }else{
+            res.status(500).json({message: "Cann't delete!"});
+        }
     } catch (error) {
         console.log("errors: ", error);
         res.status(500).json(error);
