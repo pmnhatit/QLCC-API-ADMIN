@@ -14,6 +14,10 @@ module.exports.getWaterBillById = async (bill_id) =>{
     const result = await waterBillModel.findOne({'_id': bill_id, 'is_delete': false});
     return result;
 }
+module.exports.getAllBillsByMonth = async (month, year) =>{
+    const result = await waterBillModel.find({'month': month, 'year': year, 'is_delete': false});
+    return result;
+}
 //CREATE
 module.exports.createWaterBill = async (apart_id, new_index, month, year) =>{
     const res = await cal.calculateWater(apart_id, new_index, month, year);
