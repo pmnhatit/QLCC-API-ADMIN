@@ -37,14 +37,14 @@ module.exports.getRepairNoticeById = async (notice_id) =>{
 //UPDATE
 module.exports.updateNoticeStatusById = async (notice_id, status) =>{
     mongoose.set('useFindAndModify', false);
-    const result = await repairModel.findOneAndUpdate({'_id': notice_id}, {$set: {'status': status}}, {
+    const result = await repairModel.findOneAndUpdate({'_id': notice_id, 'is_delete': false}, {$set: {'status': status}}, {
         new: true
     })
     return result;
 }
 module.exports.updateIsReadStatus = async(notice_id, admin_status) =>{
     mongoose.set('useFindAndModify', false);
-    const result = await repairModel.findOneAndUpdate({'_id': notice_id}, {'is_read_admin': admin_status},
+    const result = await repairModel.findOneAndUpdate({'_id': notice_id, 'is_delete': false}, {'is_read_admin': admin_status},
     {
         new: true
     })

@@ -22,6 +22,16 @@ module.exports.getBillByMonth = async (req, res, next) =>{
         res.status(500);
     }
 }
+module.exports.getAllBillsByMonth = async (req, res, next) =>{
+    try {
+        const {month, year} = req.params;
+        const month_bills = await electricBillServices.getAllBillByMonth(month, year);
+        res.status(200).json({data: month_bills});
+    } catch (error) {
+        console.log("errors: ",error);
+        res.status(500);
+    }
+}
 //CREATE
 module.exports.createElectricBill = async (req, res, next) =>{
     try {
@@ -47,7 +57,7 @@ module.exports.updateElectricBill = async (req, res, next) =>{
 //DELETE
 module.exports.deleteElectricBill = async (req, res, next) =>{
     try {
-        const {bill_id} = req.body;
+        const {bill_id} = req.params;
         const bill = await electricBillServices.deleteElectricBill(bill_id);
         if(bill.is_delete==true){
             res.status(200).json();

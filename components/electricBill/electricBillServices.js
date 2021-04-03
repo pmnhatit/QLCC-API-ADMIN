@@ -15,6 +15,10 @@ module.exports.getElectricBillById = async (bill_id) =>{
     const result = await electricBillModel.findOne({'_id': bill_id, 'is_delete': false});
     return result;
 }
+module.exports.getAllBillByMonth = async (month, year) =>{
+    const result = await electricBillModel.find({'month': month, 'year': year, 'is_delete': false});
+    return result;
+}
 //CREATE
 module.exports.createElectricBill = async (apart_id, new_index, month, year) =>{
     const res = await cal.calculateElectric(apart_id, new_index, month, year);
