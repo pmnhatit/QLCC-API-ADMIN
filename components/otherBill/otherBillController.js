@@ -1,5 +1,5 @@
 const otherBillServices = require('./otherBillServices');
-
+//GET
 module.exports.getBillByApartmentId = async (req, res, next)=>{
     try {
         const apart_id = req.params.apart_id;
@@ -8,7 +8,7 @@ module.exports.getBillByApartmentId = async (req, res, next)=>{
         res.json({data: all_bill});
     } catch (error) {
         console.log("errors: ",error);
-        res.status(500);
+        res.status(500).json(error);
     }
 }
 module.exports.getBillByMonth = async (req, res, next) =>{
@@ -19,9 +19,10 @@ module.exports.getBillByMonth = async (req, res, next) =>{
         res.json({data: month_bill});
     } catch (error) {
         console.log("errors: ",error);
-        res.status(500);
+        res.status(500).json(error);
     }
 }
+//CREATE
 module.exports.createOtherBill = async (req, res, next) =>{
     try {
         const {apart_id, apart_management, n_motobikes, n_cars, maintenance_fee, 
@@ -31,6 +32,44 @@ module.exports.createOtherBill = async (req, res, next) =>{
         res.json({data: new_bill});
     } catch (error) {
         console.log("errors: ", error);
-        res.status(500);
+        res.status(500).json(error);
+    }
+}
+module.exports.getAllBillsByMonth = async (req, res, next) =>{
+    try {
+        const {month, year} = req.params;
+        const bills = await otherBillServices.getAllBillsByMonth(month, year);
+        res.status(200).json({data: bills});
+    } catch (error) {
+        console.log("errors: ", error);
+        res.status(500).json(error);
+    }
+}
+//UPDATE
+module.exports.updateOtherBill = async (req, res, next) =>{
+    try {
+        const {bill_id, apart_id, apart_management, n_motobikes, n_cars, maintenance_fee, 
+            service_charge, other_fees, month, year, note} = req.body;
+        const bill = await otherBillServices.updateOtherBill(bill_id, apart_id, apart_management, n_motobikes, n_cars, 
+            maintenance_fee, service_charge, other_fees, month, year, note);
+        res.status(200).json({data: bill});
+    } catch (error) {
+        console.log("errors: ", error);
+        res.status(500).json(error);
+    }
+}
+//DELETE
+module.exports.deleteOtherBill = async (req, res, next) =>{
+    try {
+        const {bill_id} = req.params;
+        const bill = await otherBillServices.deleteOtherBill(bill_id);
+        if(bill.is_delete==true){
+            res.status(200).json();
+        }else{
+            res.status(500).json({message: "Cann't delete"});
+        }
+    } catch (error) {
+        console.log("errors: ", error);
+        res.status(500).json(error);
     }
 }
