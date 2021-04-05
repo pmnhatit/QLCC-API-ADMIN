@@ -43,6 +43,15 @@ module.exports.createApartment = async (req, res, next) =>{
         res.status(500).json(error);
     }
 }
+module.exports.getAllApartsEmpty = async (req, res, next) =>{
+    try {
+        const aparts = await apartServices.getAllApartsEmpty();
+        res.status(200).json({data: aparts});
+    } catch (error) {
+        console.log("errors: ",error);
+        res.status(500).json(error);
+    }
+}
 //UPDATE
 module.exports.updateApartment = async (req, res, next) =>{
     try {
@@ -54,6 +63,17 @@ module.exports.updateApartment = async (req, res, next) =>{
         res.status(500).json(error);
     }
 }
+module.exports.changeApartStatus = async (req, res, next) =>{
+    try {
+        const {apart_id, status} = req.body;
+        const apart = await apartServices.updateApartStatus(apart_id, status);
+        res.status(200).json({data: apart});
+    } catch (error) {
+        console.log("errors: ", error);
+        res.status(500).json(error);
+    }
+}
+//DELETE
 module.exports.deleteApartment = async (req, res, next) =>{
     try {
         const {apart_id} = req.params;

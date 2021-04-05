@@ -21,7 +21,7 @@ module.exports.getApartmentsByIdUser = async (user_id) =>{
     }
     return aparts;
 }
-module.exports.getAllApartsForRent = async ()=>{
+module.exports.getAllApartsEmpty = async ()=>{
     const aparts = await apartmentModel.find({'status': 1, 'is_delete': false});
     return aparts;
 }
@@ -35,6 +35,15 @@ module.exports.updateApartment = async (apart_id, name, block, area, direction, 
     mongoose.set('useFindAndModify', false);
     const new_apart = await apartmentModel.findByIdAndUpdate({'_id': apart_id},
     {'name': name, 'block': block, 'area': area, 'direction': direction, 'type': type, 'image': images, 'description': description},
+    {
+        new: true
+    })
+    return new_apart;
+}
+module.exports.updateApartStatus = async (apart_id, status) =>{
+    mongoose.set('useFindAndModify', false);
+    const new_apart = await apartmentModel.findByIdAndUpdate({'_id': apart_id},
+    {'status': status},
     {
         new: true
     })
