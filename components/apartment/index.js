@@ -14,9 +14,9 @@ router.get('/:id', passPort.authenticate('jwt',{session: false}), apartControlle
 
 router.post('/add', passPort.authenticate('jwt',{session: false}), apartController.createApartment);
 
-router.patch('/update', passPort.authenticate('jwt',{session: false}), apartController.updateApartment);
+router.put('/update', passPort.authenticate('jwt',{session: false}), apartController.updateApartment);
 
-router.patch('/change-status', passPort.authenticate('jwt',{session: false}), apartController.changeApartStatus);
+router.put('/change-status', passPort.authenticate('jwt',{session: false}), apartController.changeApartStatus);
 
 router.delete('/delete/:apart_id', passPort.authenticate('jwt',{session: false}), apartController.deleteApartment);
 

@@ -23,8 +23,13 @@ module.exports.getBlockById = async (req, res, next) =>{
 module.exports.createBlock = async (req, res, next) =>{
     try {
         const {name} = req.body;
-        const new_block = await blockServices.createBlock(name);
-        res.status(201).json({data: new_block});
+        const block = await blockServices.getBlockByName(name);
+        if(block){
+            res.status(401).json({message:"block_exists"});
+        }else{
+            const new_block = await blockServices.createBlock(name);
+            res.status(200).json({data: new_block});
+        }
     } catch (error) {
         console.log("errors: ", error);
         res.status(500).json(error);

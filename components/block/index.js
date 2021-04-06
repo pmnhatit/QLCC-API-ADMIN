@@ -8,7 +8,7 @@ router.get('/all', passPort.authenticate('jwt', {session: false}), blockControll
 
 router.get('/:block_id', passPort.authenticate('jwt', {session: false}), blockController.getBlockById);
 
-router.post('/create', passPort.authenticate('jwt', {session: false}), blockController.createBlock);
+router.post('/add', passPort.authenticate('jwt', {session: false}), blockController.createBlock);
 
 router.put('/update', passPort.authenticate('jwt', {session: false}), blockController.updateBlockById);
 
