@@ -1,6 +1,12 @@
 const authModel = require('./auth');
 const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose');
+
+module.exports.checkOldPassword = async (user_id, old_pass) =>{
+    const user = await this.getUserById(user_id);
+    const result = bcrypt.compareSync(old_pass, user.password);
+    return result;
+}
 //GET
 module.exports.getUserByUsername = async (username) =>{
     const result = await authModel.findOne({'username': username, 'is_delete': false});

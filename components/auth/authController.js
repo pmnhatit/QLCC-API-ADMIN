@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const passportJWT = require("passport-jwt");
+const bcrypt = require('bcryptjs');
 const ExtractJwt = passportJWT.ExtractJwt;
 
 const jwtOptions = {}
@@ -19,7 +20,7 @@ module.exports.login = async (req, res, next) =>{
         const sign = {username: user.username, id: user.id, role: user.role}
         const token = jwt.sign(sign, process.env.KEY_SECRET);
         console.log(token);
-        const infoUser = {id: user.id, username: user.username, name: user.name, phone: user.phone, email: user.email, 
+        const infoUser = {_id: user.id, username: user.username, name: user.name, phone: user.phone, email: user.email, 
             avatar: user.avatar, role: user.role, token_device: user.token_device, is_delete: user.is_delete};
         res.json({token: token, infoUser: infoUser});
     }
@@ -37,7 +38,7 @@ module.exports.createUser = async(req, res , next) => {
             const newUser = await authServices.createUser(username, password, name, phone, email);
             const payload = {username: newUser.username, id: newUser._id, role: newUser.role};
             const token = jwt.sign(payload, jwtOptions.secretOrKey);
-            const infoUser = {id: newUser._id, username: newUser.username, name: newUser.name, 
+            const infoUser = {_id: newUser._id, username: newUser.username, name: newUser.name, 
                 phone: newUser.phone, email: newUser.email, role: newUser.role, token_device: newUser.token_device, 
                 avatar: newUser.avatar, is_delete: newUser.is_delete};
             res.json({token: token, infoUser: infoUser});
@@ -91,9 +92,16 @@ module.exports.updateTokenDevice = async (req, res, next) =>{
 }
 module.exports.changePassword = async (req, res, next) =>{
     try {
-        const {user_id, new_pass} = req.body;
-        const user = await authServices.changePassword(user_id, new_pass);
-        res.status(200).json({data: user});
+        const {user_id, new_pass, old_pass} = req.body;
+        const user = await authServices.getUserById(user_id);
+        const check = await authServices.checkOldPassword(user_id, old_pass);
+        console.log("check", check);
+        if(check==false){
+            res.status(400).json({message: "Current password is incorrect!"});
+        }else{
+            const new_user = await authServices.changePassword(user_id, new_pass);
+            res.status(200).json({data: new_user});
+        }
     } catch (error) {
         console.log("errors: ",error);
         res.status(500).json(error);
