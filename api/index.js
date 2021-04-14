@@ -12,6 +12,7 @@ const uploadImage = require('../components/uploadImage');
 const block = require('../components/block');
 const pushNoti = require('../components/pushNotification');
 const user = require('../components/user');
+const uploadV2 = require('../components/uploadV2');
 
 router.use('/auth', auth);
 
@@ -36,5 +37,7 @@ router.use('/block', block);
 router.use('/push-noti', pushNoti);
 
 router.use('/user', user);
+
+router.use('/uploadv2', uploadV2);
 
 module.exports = router;
