@@ -1,5 +1,4 @@
 const electricBillModel = require('./electricBill');
-const unitPriceServices = require('../unitPrice/unitPriceServices');
 const cal = require('../../services/calculate/calculate');
 
 //GET
@@ -25,6 +24,10 @@ module.exports.createElectricBill = async (apart_id, new_index, month, year) =>{
     const newBill = new electricBillModel({apart_id, old_index: res.old_index, new_index, 
         unit_price: res.unit_price, consume: res.consume, month, year, total_money: res.total_money});
     return await newBill.save();
+}
+module.exports.importFile = async(data) =>{
+    const result = await electricBillModel.insertMany(data);
+    return result;
 }
 //UPDATE
 module.exports.updateElectricBill = async (bill_id, new_index) =>{

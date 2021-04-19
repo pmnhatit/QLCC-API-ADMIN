@@ -6,11 +6,15 @@ var electricBillSchema = new mongoose.Schema({
     apart_id: String,
     old_index: Number,
     new_index: Number,
-    unit_price: Number,
+    // unit_price: Number,
     consume: Number,
     month: Number,
     year: Number,
     total_money: Number,
+    is_pay: {
+        type: Boolean,
+        default: false
+    },
     is_delete:{
         type: Boolean,
         default: false

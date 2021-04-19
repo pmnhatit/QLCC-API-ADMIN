@@ -13,6 +13,8 @@ const block = require('../components/block');
 const pushNoti = require('../components/pushNotification');
 const user = require('../components/user');
 const uploadV2 = require('../components/uploadV2');
+const uploadCSV = require('../components/uploadCSV');
+const allBill = require('../components/allBill');
 
 router.use('/auth', auth);
 
@@ -39,5 +41,9 @@ router.use('/push-noti', pushNoti);
 router.use('/user', user);
 
 router.use('/uploadv2', uploadV2);
+
+router.use('/upload-csv', uploadCSV);
+
+router.use('/all-bill', allBill);
 
 module.exports = router;

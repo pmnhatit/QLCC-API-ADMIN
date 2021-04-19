@@ -25,6 +25,10 @@ module.exports.createWaterBill = async (apart_id, new_index, month, year) =>{
         consume: res.consume, month, year, total_money: res.total_money});
     return await newBill.save();
 }
+module.exports.importFile = async(data) =>{
+    const result = await waterBillModel.insertMany(data);
+    return result;
+}
 //UPDATE
 module.exports.updateWaterBill = async (bill_id, new_index) =>{
     const old_bill = await this.getWaterBillById(bill_id);

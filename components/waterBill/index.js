@@ -12,6 +12,8 @@ router.get('/month-bill/:apart_id/:month/:year', passPort.authenticate('jwt',{se
 
 router.post('/add', passPort.authenticate('jwt',{session: false}), waterBillController.createElectricBill);
 
+router.post('/import-file', passPort.authenticate('jwt',{session: false}), waterBillController.importCSV);
+
 router.put('/update', passPort.authenticate('jwt',{session: false}), waterBillController.updateWaterBill);
 
 router.delete('/delete/:bill_id', passPort.authenticate('jwt',{session: false}), waterBillController.deleteWaterBill);
