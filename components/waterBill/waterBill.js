@@ -11,6 +11,10 @@ var waterBillSchema = new mongoose.Schema({
     month: Number,
     year: Number,
     total_money: Number,
+    is_pay: {
+        type: Boolean,
+        default: false
+    },
     is_delete: {
         type: Boolean,
         default: false

@@ -44,6 +44,13 @@ module.exports.updateOtherBill = async (bill_id, apart_id, apart_management, n_m
     });
     return result;
 }
+module.exports.changeIsPay = async (apart_id, month, year, status) =>{
+    mongoose.set('useFindAndModify', false);
+    const result = await otherBillModel.findOneAndUpdate({'apart_id': apart_id, 'month': month, 'year': year, 'is_delete': false},
+    {'is_pay': status},
+    {new: true});
+    return result;
+}
 //DELETE
 module.exports.deleteOtherBill = async (bill_id) =>{
     mongoose.set('useFindAndModify', false);

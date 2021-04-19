@@ -1,5 +1,8 @@
 const allBillServices = require('./allBillServices');
 const apartServices = require('../apartment/apartServices');
+const elctricBillServices = require('../electricBill/electricBillServices');
+const waterBillServices = require('../waterBill/waterBillServices');
+const otherBillServices = require('../otherBill/otherBillServices');
 
 //GET
 module.exports.getAllBillMonth = async (req, res, next) =>{//lay hoa don tat ca can ho trong thang
@@ -116,6 +119,9 @@ module.exports.changeIsPay = async (req, res, next) =>{
         const bill = await allBillServices.changeIsPay(bill_id, status);
         console.log(bill);
         if(bill){
+            await elctricBillServices.changeIsPay(bill.apart_id, bill.month, bill.year, status);
+            await waterBillServices.changeIsPay(bill.apart_id, bill.month, bill.year, status);
+            await otherBillServices.changeIsPay(bill.apart_id, bill.month, bill.year, status);
             const apart = await apartServices.getApartmentById(bill.apart_id);
         const result = {id: bill._id, apart_id: bill.apart_id, apart_name: apart.name, electric_bill: bill.electric_bill,
             water_bill: bill.water_bill, other_bill: bill.other_bill, total_money: bill.total_money, image: bill.image,

@@ -1,3 +1,5 @@
+const mongoose = require('mongoose');
+
 const electricBillModel = require('./electricBill');
 const cal = require('../../services/calculate/calculate');
 
@@ -35,6 +37,7 @@ module.exports.updateElectricBill = async (bill_id, new_index) =>{
     const old_index = old_bill.old_index;
     const consume = new_index - old_index;
     const unit_price = old_bill.unit_price;
+    mongoose.set('useFindAndModify', false);
     const result = await electricBillModel.findOneAndUpdate({'_id': bill_id},
     {'new_index': new_index, 'consume': consume, 'total_money': consume*unit_price},
     {
@@ -42,8 +45,16 @@ module.exports.updateElectricBill = async (bill_id, new_index) =>{
     });
     return result;
 }
+module.exports.changeIsPay = async (apart_id, month, year, status) =>{
+    mongoose.set('useFindAndModify', false);
+    const result = await electricBillModel.findOneAndUpdate({'apart_id': apart_id, 'month': month, 'year': year, 'is_delete': false},
+    {'is_pay': status},
+    {new: true});
+    return result;
+}
 //DELETE
 module.exports.deleteElectricBill = async (bill_id) =>{
+    mongoose.set('useFindAndModify', false);
     const result = await electricBillModel.findOneAndUpdate({'_id': bill_id},
     {'is_delete': true},
     {
