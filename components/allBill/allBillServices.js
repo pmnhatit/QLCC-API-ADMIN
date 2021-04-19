@@ -11,6 +11,10 @@ module.exports.getBillById = async (id) =>{//lay hoa don theo id
     const result = await allBillModel.findOne({'_id': id, 'is_delete': false});
     return result;
 }
+module.exports.getAllByIsPay = async (is_pay, month, year) =>{
+    const result = await allBillModel.find({'month': month, 'year': year, 'is_pay': is_pay, 'is_delete': false});
+    return result;
+}
 module.exports.getAllByApartId = async (apart_id) =>{//lay tat ca hoa don cua can ho
     const result = await allBillModel.find({'apart_id': apart_id, 'is_delete': false});
     return result;
@@ -31,14 +35,14 @@ module.exports.createBill = async (apart_id, electric_bill, water_bill, other_bi
 //UPDATE
 module.exports.changeIsPay = async (bill_id, status) =>{
     mongoose.set('useFindAndModify', false);
-    const result = await allBillModel.findOneAndUpdate({'id': bill_id},
+    const result = await allBillModel.findOneAndUpdate({'_id': bill_id},
     {'is_pay': status},
     {new: true});
     return result;
 }
 module.exports.updateImage = async (bill_id, image) =>{
     mongoose.set('useFindAndModify', false);
-    const result = await allBillModel.findOneAndUpdate({'id': bill_id},
+    const result = await allBillModel.findOneAndUpdate({'_id': bill_id},
     {'image': image},
     {new: true});
     return result;
