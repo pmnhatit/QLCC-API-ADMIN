@@ -37,6 +37,16 @@ module.exports.getAllBillsByMonth = async (req, res, next) =>{
         res.status(500).json(error);
     }
 }
+module.exports.getBillById = async (req, res, next) =>{
+    try {
+        const {bill_id} = req.params;
+        const bill = await otherBillServices.getBillById(bill_id);
+        res.status(200).json({data: bill});
+    } catch (error) {
+        console.log("errors: ", error);
+        res.status(500).json(error);
+    }
+}
 //CREATE
 module.exports.createOtherBill = async (req, res, next) =>{
     try {

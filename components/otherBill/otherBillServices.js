@@ -15,6 +15,10 @@ module.exports.getAllBillsByMonth = async (month, year) =>{
     const result = await otherBillModel.find({'month': month, 'year': year, 'is_delete': false});
     return result;
 }
+module.exports.getBillById = async (bill_id) =>{
+    const result = await otherBillModel.findOne({'_id': bill_id, 'is_delete': false});
+    return result;
+}
 //CREATE
 module.exports.createOtherBill = async (apart_id, apart_management, n_motobikes, n_cars, maintenance_fee, 
     service_charge, other_fees, month, year, note) =>{
