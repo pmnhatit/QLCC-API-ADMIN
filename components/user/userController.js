@@ -1,9 +1,41 @@
 const userServices = require('./userServices');
+const apartServices = require('../apartment/apartServices');
+const blockServices = require('../block/blockServices');
 //GET
 module.exports.getAllUser = async (req, res, next) =>{
     try {
         const users = await userServices.getAllUser();
-        res.status(200).json({data: users});
+        let data = [];
+        for(let i=0; i<users.length; i++){
+            let aparts = [], blocks = [];
+            for(let j=0; j<users[i].apartment_id.length; j++){
+                const apart = await apartServices.getApartmentById(users[i].apartment_id[j]);
+                aparts.push(apart.name);
+            }
+            for(let k=0; k<users[i].block_id.length; k++){
+                const block = await blockServices.getBlockById(users[i].block_id[k]);
+                blocks.push(block.name);
+            }
+            const user = {
+                id: users[i]._id,
+                username: users[i].username,
+                name: users[i].name,
+                phone: users[i].phone,
+                email: users[i].email,
+                identify_card: users[i].identify_card,
+                native_place: users[i].native_place,
+                token_device: users[i].token_device,
+                avatar: users[i].avatar,
+                apart_id: users[i].apartment_id,
+                apart_name: aparts,
+                block_id: users[i].block_id,
+                block_name: blocks,
+                license_plates: users[i].license_plates,
+                is_delete: users[i].is_delete
+            }
+            data.push(user);
+        }
+        res.status(200).json({data: data});
     } catch (error) {
         console.log("errors: ", error);
         res.status(500).json(error);
@@ -13,7 +45,37 @@ module.exports.getUserById = async (req, res, next) =>{
     try {
         const {user_id} = req.params;
         const user = await userServices.getUserById(user_id);
-        res.json({data: user});
+        if(user){
+            let aparts = [], blocks = [];
+            for(let j=0; j<user.apartment_id.length; j++){
+                const apart = await apartServices.getApartmentById(user.apartment_id[j]);
+                aparts.push(apart.name);
+            }
+            for(let k=0; k<user.block_id.length; k++){
+                const block = await blockServices.getBlockById(user.block_id[k]);
+                blocks.push(block.name);
+            }
+            const data = {
+                id: user._id,
+                username: user.username,
+                name: user.name,
+                phone: user.phone,
+                email: user.email,
+                identify_card: user.identify_card,
+                native_place: user.native_place,
+                token_device: user.token_device,
+                avatar: user.avatar,
+                apart_id: user.apartment_id,
+                apart_name: aparts,
+                block_id: user.block_id,
+                block_name: blocks,
+                license_plates: user.license_plates,
+                is_delete: user.is_delete
+            }
+            res.status(200).json({data: data});
+        }else{
+            res.status(400).json({message: "No user"});
+        }
     } catch (error) {
         console.log("errors: ", error);
         res.status(500).json(error);
@@ -68,8 +130,42 @@ module.exports.searchByLicensePlate = async (req, res, next) =>{
         const {
             search
         } = req.query;
-        const user = await userServices.searchByLicensePlate(search);
-        res.status(200).json({data: user});
+        const users = await userServices.searchByLicensePlate(search);
+        if(users.length==0){
+            res.status(400).json({message: "No user"});
+        }else{
+            let data = [];
+            for(let i=0; i<users.length; i++){
+                let aparts = [], blocks = [];
+                for(let j=0; j<users[i].apartment_id.length; j++){
+                    const apart = await apartServices.getApartmentById(users[i].apartment_id[j]);
+                    aparts.push(apart.name);
+                }
+                for(let k=0; k<users[i].block_id.length; k++){
+                    const block = await blockServices.getBlockById(users[i].block_id[k]);
+                    blocks.push(block.name);
+                }
+                const user = {
+                    id: users[i]._id,
+                    username: users[i].username,
+                    name: users[i].name,
+                    phone: users[i].phone,
+                    email: users[i].email,
+                    identify_card: users[i].identify_card,
+                    native_place: users[i].native_place,
+                    token_device: users[i].token_device,
+                    avatar: users[i].avatar,
+                    apart_id: users[i].apartment_id,
+                    apart_name: aparts,
+                    block_id: users[i].block_id,
+                    block_name: blocks,
+                    license_plates: users[i].license_plates,
+                    is_delete: users[i].is_delete
+                }
+                data.push(user);
+            }
+            res.status(200).json({data: data});
+        }
     } catch (error) {
         console.log("errors: ", error);
         res.status(500).json(error);
