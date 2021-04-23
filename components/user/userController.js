@@ -62,3 +62,16 @@ module.exports.deleteUser = async (req, res, next) =>{
         res.status(500).json(error);
     }
 }
+//SEARCH
+module.exports.searchByLicensePlate = async (req, res, next) =>{
+    try {
+        const {
+            search
+        } = req.query;
+        const user = await userServices.searchByLicensePlate(search);
+        res.status(200).json({data: user});
+    } catch (error) {
+        console.log("errors: ", error);
+        res.status(500).json(error);
+    }
+}

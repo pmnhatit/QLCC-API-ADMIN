@@ -48,3 +48,8 @@ module.exports.deleteUser = async (user_id) =>{
     });
     return result;
 }
+//SEARCH
+module.exports.searchByLicensePlate = async (search) =>{
+    const result = await userModel.find({$text: {$search: search}});
+    return result;
+}

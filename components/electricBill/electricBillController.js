@@ -20,7 +20,6 @@ module.exports.getBillByApartmentId = async (req, res, next) =>{
 module.exports.getBillByMonth = async (req, res, next) =>{
     try {
         const {apart_id, month, year} = req.params;
-        console.log("month: ",month);
         const month_bill = await electricBillServices.getElectricBillByMonth(apart_id, month, year);
         res.json({data: month_bill});
     } catch (error) {

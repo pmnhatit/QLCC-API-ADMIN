@@ -6,6 +6,8 @@ const userController = require('./userController');
 
 router.get('/all', passPort.authenticate('jwt',{session: false}), userController.getAllUser);
 
+router.get('/search', passPort.authenticate('jwt',{session: false}), userController.searchByLicensePlate);
+
 router.get('/:user_id', passPort.authenticate('jwt',{session: false}), userController.getUserById);
 
 router.post('/add', passPort.authenticate('jwt',{session: false}), userController.createUser);

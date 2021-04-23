@@ -6,13 +6,15 @@ const allBillController = require('./allBillController');
 
 router.get('/all-filter', passPort.authenticate('jwt',{session: false}), allBillController.getAllByIsPay);
 
+router.get('/all-report', passPort.authenticate('jwt',{session: false}), allBillController.getAllByReportStatus)
+
 router.get('/all/:month/:year', passPort.authenticate('jwt',{session: false}), allBillController.getAllBillMonth);
 
 router.get('/:bill_id', passPort.authenticate('jwt',{session: false}), allBillController.getBillById);
 
-// router.post('/add', passPort.authenticate('jwt',{session: false}), allBillController.createBill);
-
 router.put('/change-pay', passPort.authenticate('jwt',{session: false}), allBillController.changeIsPay);
+
+router.put('/change-report', passPort.authenticate('jwt',{session: false}), allBillController.changeReportStatus)
 
 // router.delete('/delete/:bill_id', passPort.authenticate('jwt',{session: false}), electricBillController.deleteElectricBill);
 

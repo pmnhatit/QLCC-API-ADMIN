@@ -26,6 +26,10 @@ var allBillSchema = new mongoose.Schema({
     month: Number,
     year: Number,
     total_money: Number,
+    report: {
+        type: Boolean,
+        default: false
+    },
     is_pay: {
         type: Boolean,
         default: false

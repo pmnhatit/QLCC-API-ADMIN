@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 var db = mongoose.connection;
 
 //create schame
-var authSchema = new mongoose.Schema({
+var userSchema = new mongoose.Schema({
     username: {
         type: String,
         trim: true
@@ -13,6 +13,10 @@ var authSchema = new mongoose.Schema({
     email: String,
     identify_card: String,
     native_place: String,
+    license_plates: [{
+        type: String,
+        default: ""
+    }],//bang so xe
     block_id: [{
         type: String,
         default:""
@@ -38,6 +42,8 @@ var authSchema = new mongoose.Schema({
         collection: 'user'
     });
 
-const user = db.useDb("qlcc").model("user", authSchema);
+    userSchema.index({license_plates: 'text'});
+
+const user = db.useDb("qlcc").model("user", userSchema);
 
 module.exports = user;

@@ -19,7 +19,6 @@ module.exports.getBillByApartmentId = async (req, res, next)=>{
 module.exports.getBillByMonth = async (req, res, next) =>{
     try {
         const {apart_id, month, year} = req.params;
-        console.log("month: ",month);
         const month_bill = await otherBillServices.getOtherBillByMonth(apart_id, month, year);
         res.status(200).json({data: month_bill});
     } catch (error) {

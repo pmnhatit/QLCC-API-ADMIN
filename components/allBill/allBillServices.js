@@ -23,14 +23,15 @@ module.exports.getBillOfApartByMonth = async (apart_id, month, year) =>{//lay ho
     const result = await allBillModel.findOne({'apart_id': apart_id, 'month': month, 'year': year, 'is_delete': false});
     return result;
 }
-//CREATE
-module.exports.createBill = async (apart_id, electric_bill, water_bill, other_bill, month, year) =>{
-    const total_money = electric_bill + water_bill + other_bill;
-    const new_bill = new allBillModel({apart_id, electric_bill, water_bill, other_bill, total_money, month, year});
-    return await new_bill.save();
+module.exports.getAllByReportStatus = async () =>{//lay tat ca hoa don co khieu nai
+    const result = await allBillModel.find({'report': true, 'is_delete': false});
+    return result;
 }
-// module.exports.createManyBill = async (data) =>{
-//     const result = await allBillModel.updateMany({})
+//CREATE
+// module.exports.createBill = async (apart_id, electric_bill, water_bill, other_bill, month, year) =>{
+//     const total_money = electric_bill + water_bill + other_bill;
+//     const new_bill = new allBillModel({apart_id, electric_bill, water_bill, other_bill, total_money, month, year});
+//     return await new_bill.save();
 // }
 //UPDATE
 module.exports.changeIsPay = async (bill_id, status) =>{
@@ -58,7 +59,8 @@ module.exports.updateElectricBill = async (electric_bill, apart_id, month, year)
         total = electric_bill;
     }
     const result = await allBillModel.updateOne({'apart_id': apart_id, 'month': month, 'year': year},
-    {'electric_bill': electric_bill, 'total_money': total, 'is_delete': false, 'is_pay': false, 'image': image},
+    {'electric_bill': electric_bill, 'total_money': total, 'report': false, 'is_delete': false, 
+    'is_pay': false, 'image': image},
     {upsert: true});
 }
 module.exports.updateWaterBill = async (water_bill, apart_id, month, year) =>{
@@ -72,7 +74,8 @@ module.exports.updateWaterBill = async (water_bill, apart_id, month, year) =>{
         total = water_bill;
     }
     const result = await allBillModel.updateOne({'apart_id': apart_id, 'month': month, 'year': year},
-    {'water_bill': water_bill, 'total_money': total, 'is_delete': false, 'is_pay': false, 'image': image},
+    {'water_bill': water_bill, 'total_money': total, 'report': false, 'is_delete': false, 
+    'is_pay': false, 'image': image},
     {upsert: true});
 }
 module.exports.updateOtherBill = async (other_bill, apart_id, month, year) =>{
@@ -86,8 +89,16 @@ module.exports.updateOtherBill = async (other_bill, apart_id, month, year) =>{
         total = other_bill;
     }
     const result = await allBillModel.updateOne({'apart_id': apart_id, 'month': month, 'year': year},
-    {'other_bill': other_bill, 'total_money': total, 'is_delete': false, 'is_pay': false, 'image': image},
+    {'other_bill': other_bill, 'total_money': total, 'report': false, 'is_delete': false, 
+    'is_pay': false, 'image': image},
     {upsert: true});
+}
+module.exports.changeReportStatus = async (bill_id, status) =>{
+    mongoose.set('useFindAndModify', false);
+    const result = await allBillModel.findOneAndUpdate({'_id': bill_id},
+    {'report': status},
+    {new: true});
+    return result;
 }
 //DELETE
 module.exports.deleteBill = async (bill_id) =>{
