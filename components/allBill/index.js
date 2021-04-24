@@ -8,6 +8,8 @@ router.get('/all-filter', passPort.authenticate('jwt',{session: false}), allBill
 
 router.get('/all-report', passPort.authenticate('jwt',{session: false}), allBillController.getAllByReportStatus)
 
+router.get('/all-resolved', passPort.authenticate('jwt',{session: false}), allBillController.getAllReportResolved);
+
 router.get('/all/:month/:year', passPort.authenticate('jwt',{session: false}), allBillController.getAllBillMonth);
 
 router.get('/:bill_id', passPort.authenticate('jwt',{session: false}), allBillController.getBillById);

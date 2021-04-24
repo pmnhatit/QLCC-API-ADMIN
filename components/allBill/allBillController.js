@@ -128,6 +128,35 @@ module.exports.getAllByReportStatus = async (req, res, next) =>{
         res.status(500).json(error);
     }
 }
+module.exports.getAllReportResolved = async (req, res, next) =>{
+    try {
+        const bills = await allBillServices.getAllBillReportResolved();
+        let data = [];
+        for(let i=0; i<bills.length; i++){
+            const apart = await apartServices.getApartmentById(bills[i].apart_id);
+            const bill = {
+                id: bills[i]._id,
+                apart_id: bills[i].apart_id,
+                apart_name: apart.name,
+                electric_bill: bills[i].electric_bill,
+                water_bill: bills[i].water_bill,
+                other_bill: bills[i].other_bill,
+                image: bills[i].image,
+                month: bills[i].month,
+                year: bills[i].year,
+                total_money: bills[i].total_money,
+                report: bills[i].report,
+                is_pay: bills[i].is_pay,
+                is_delete: bills[i].is_delete
+            }
+            data.push(bill);
+        }
+        res.status(200).json({data: data});
+    } catch (error) {
+        console.log("errors: ",error);
+        res.status(500).json(error);
+    }
+}
 //CREATE
 module.exports.createBill = async (req, res, next) =>{
     try {
