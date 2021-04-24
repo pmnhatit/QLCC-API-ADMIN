@@ -130,7 +130,8 @@ module.exports.getAllByReportStatus = async (req, res, next) =>{
 }
 module.exports.getAllReportResolved = async (req, res, next) =>{
     try {
-        const bills = await allBillServices.getAllBillReportResolved();
+        const {month, year} = req.params;
+        const bills = await allBillServices.getAllBillReportResolved(month, year);
         let data = [];
         for(let i=0; i<bills.length; i++){
             const apart = await apartServices.getApartmentById(bills[i].apart_id);

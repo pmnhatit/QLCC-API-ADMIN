@@ -8,7 +8,7 @@ router.get('/all-filter', passPort.authenticate('jwt',{session: false}), allBill
 
 router.get('/all-report', passPort.authenticate('jwt',{session: false}), allBillController.getAllByReportStatus)
 
-router.get('/all-resolved', passPort.authenticate('jwt',{session: false}), allBillController.getAllReportResolved);
+router.get('/all-resolved/:month/:year', passPort.authenticate('jwt',{session: false}), allBillController.getAllReportResolved);
 
 router.get('/all/:month/:year', passPort.authenticate('jwt',{session: false}), allBillController.getAllBillMonth);
 
@@ -16,7 +16,7 @@ router.get('/:bill_id', passPort.authenticate('jwt',{session: false}), allBillCo
 
 router.put('/change-pay', passPort.authenticate('jwt',{session: false}), allBillController.changeIsPay);
 
-router.put('/change-report', passPort.authenticate('jwt',{session: false}), allBillController.changeReportStatus)
+router.put('/change-report', passPort.authenticate('jwt',{session: false}), allBillController.changeReportStatus);
 
 // router.delete('/delete/:bill_id', passPort.authenticate('jwt',{session: false}), electricBillController.deleteElectricBill);
 

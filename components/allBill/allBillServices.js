@@ -27,8 +27,8 @@ module.exports.getAllByReportStatus = async () =>{//lay tat ca hoa don co khieu 
     const result = await allBillModel.find({'report': true, 'is_delete': false});
     return result;
 }
-module.exports.getAllBillReportResolved = async () =>{//Hoa don da giai quyet khieu nai
-    const result = await allBillModel.find({'image': {$ne: ""}, 'is_delete': false, 'report': false});
+module.exports.getAllBillReportResolved = async (month, year) =>{//Hoa don da giai quyet khieu nai
+    const result = await allBillModel.find({'image': {$ne: ""}, 'month': month, 'year': year ,'is_delete': false, 'report': false});
     return result;
 }
 //CREATE
