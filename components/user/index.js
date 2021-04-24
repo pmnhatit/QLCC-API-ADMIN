@@ -14,6 +14,8 @@ router.post('/add', passPort.authenticate('jwt',{session: false}), userControlle
 
 router.put('/update', passPort.authenticate('jwt',{session: false}), userController.updateApartOfUser);
 
+router.put('/update-license-plate', passPort.authenticate('jwt',{session: false}), userController.updateLicensePlates);
+
 router.delete('/delete/:user_id', passPort.authenticate('jwt',{session: false}), userController.deleteUser);
 
 module.exports = router;

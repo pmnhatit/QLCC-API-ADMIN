@@ -84,14 +84,41 @@ module.exports.getUserById = async (req, res, next) =>{
 //CREATE
 module.exports.createUser = async (req, res, next) =>{
     try {
-        const {username, password, name, phone, email, identify_card, native_place, block_id, apartment_id} = req.body;
+        const {username, name, phone, email, identify_card, 
+            native_place, block_id, apartment_id, license_plates} = req.body;
         const user = await userServices.getUserByUsername(username);
         if(user){
             res.status(401).json({message:"user_exists"});
         }else{
-            const new_user = await userServices.createUser(username, password, name, phone, email, identify_card, 
-                native_place, block_id, apartment_id);
-            res.status(200).json({data: new_user});
+            const new_user = await userServices.createUser(username, name, phone, email, identify_card, 
+                native_place, block_id, apartment_id, license_plates);
+                let aparts = [], blocks = [];
+            for(let j=0; j<new_user.apartment_id.length; j++){
+                const apart = await apartServices.getApartmentById(new_user.apartment_id[j]);
+                aparts.push(apart.name);
+            }
+            for(let k=0; k<new_user.block_id.length; k++){
+                const block = await blockServices.getBlockById(new_user.block_id[k]);
+                blocks.push(block.name);
+            }
+            const data = {
+                id: new_user._id,
+                username: new_user.username,
+                name: new_user.name,
+                phone: new_user.phone,
+                email: new_user.email,
+                identify_card: new_user.identify_card,
+                native_place: new_user.native_place,
+                token_device: new_user.token_device,
+                avatar: new_user.avatar,
+                apart_id: new_user.apartment_id,
+                apart_name: aparts,
+                block_id: new_user.block_id,
+                block_name: blocks,
+                license_plates: new_user.license_plates,
+                is_delete: new_user.is_delete
+            }
+            res.status(200).json({data: data});
         }
     } catch (error) {
         console.log("errors: ", error);
@@ -103,7 +130,77 @@ module.exports.updateApartOfUser = async (req, res, next) =>{
     try {
         const {user_id, apartment_id, block_id} = req.body;
         const user = await userServices.updateApartOfUser(user_id, block_id, apartment_id);
-        res.status(200).json({data: user});
+        if(user){
+            let aparts = [], blocks = [];
+            for(let j=0; j<user.apartment_id.length; j++){
+                const apart = await apartServices.getApartmentById(user.apartment_id[j]);
+                aparts.push(apart.name);
+            }
+            for(let k=0; k<user.block_id.length; k++){
+                const block = await blockServices.getBlockById(user.block_id[k]);
+                blocks.push(block.name);
+            }
+            const data = {
+                id: user._id,
+                username: user.username,
+                name: user.name,
+                phone: user.phone,
+                email: user.email,
+                identify_card: user.identify_card,
+                native_place: user.native_place,
+                token_device: user.token_device,
+                avatar: user.avatar,
+                apart_id: user.apartment_id,
+                apart_name: aparts,
+                block_id: user.block_id,
+                block_name: blocks,
+                license_plates: user.license_plates,
+                is_delete: user.is_delete
+            }
+            res.status(200).json({data: data});
+        }else{
+            res.status(400).json({message: "No user"});
+        }
+    } catch (error) {
+        console.log("errors: ", error);
+        res.status(500).json(error);
+    }
+}
+module.exports.updateLicensePlates = async (req, res, next) =>{
+    try {
+        const {user_id, license_plates} = req.body;
+        const user = await userServices.updateLicensePlates(user_id, license_plates);
+        if(user){
+            let aparts = [], blocks = [];
+            for(let j=0; j<user.apartment_id.length; j++){
+                const apart = await apartServices.getApartmentById(user.apartment_id[j]);
+                aparts.push(apart.name);
+            }
+            for(let k=0; k<user.block_id.length; k++){
+                const block = await blockServices.getBlockById(user.block_id[k]);
+                blocks.push(block.name);
+            }
+            const data = {
+                id: user._id,
+                username: user.username,
+                name: user.name,
+                phone: user.phone,
+                email: user.email,
+                identify_card: user.identify_card,
+                native_place: user.native_place,
+                token_device: user.token_device,
+                avatar: user.avatar,
+                apart_id: user.apartment_id,
+                apart_name: aparts,
+                block_id: user.block_id,
+                block_name: blocks,
+                license_plates: user.license_plates,
+                is_delete: user.is_delete
+            }
+            res.status(200).json({data: data});
+        }else{
+            res.status(400).json({message: "No user"});
+        }
     } catch (error) {
         console.log("errors: ", error);
         res.status(500).json(error);
