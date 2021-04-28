@@ -6,7 +6,9 @@ const allBillController = require('./allBillController');
 
 router.get('/all-filter', passPort.authenticate('jwt',{session: false}), allBillController.getAllByIsPay);
 
-router.get('/all-report', passPort.authenticate('jwt',{session: false}), allBillController.getAllByReportStatus)
+router.get('/all-report', passPort.authenticate('jwt',{session: false}), allBillController.getAllByReportStatus);
+
+router.get('/statistics/:month/:year', passPort.authenticate('jwt',{session: false}), allBillController.getTotalMoneyInMonth);
 
 router.get('/all-resolved/:month/:year', passPort.authenticate('jwt',{session: false}), allBillController.getAllReportResolved);
 

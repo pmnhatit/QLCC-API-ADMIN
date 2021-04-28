@@ -31,6 +31,63 @@ module.exports.getAllBillReportResolved = async (month, year) =>{//Hoa don da gi
     const result = await allBillModel.find({'image': {$ne: ""}, 'month': month, 'year': year ,'is_delete': false, 'report': false});
     return result;
 }
+module.exports.getTotalMoneyInMonth = async (month, year) =>{
+    let total=0, electric=0, water=0, other=0;
+    const bills = await this.getAllByMonth(month, year);
+    for(let i=0; i<bills.length; i++){
+        if(bills[i].total_money){
+            total = total + bills[i].total_money;
+        }else{
+            total = total + 0;
+        }
+        if(bills[i].electric_bill){
+            electric = electric + bills[i].electric_bill;
+        }else{
+            electric = electric + 0;
+        }
+        if(bills[i].water_bill){
+            water = water + bills[i].water_bill;
+        }else{
+            water = water + 0;
+        }
+        if(bills[i].other_bill){
+            other = other + bills[i].other_bill;
+        }else{
+            other = other + 0;
+        }
+    }
+    const result = {total: total, electric: electric, water: water, other: other};
+    return result;
+}
+module.exports.getTotalUnpaidFee = async (month, year) =>{
+    const bills = await this.getAllByIsPay(false, month, year);
+    console.log("unpaid", bills);
+    let total=0, electric=0, water=0, other=0;
+    for(let i=0; i<bills.length; i++){
+        if(bills[i].total_money){
+            total = total + bills[i].total_money;
+        }else{
+            total = total + 0;
+        }
+        if(bills[i].electric_bill){
+            electric = electric + bills[i].electric_bill;
+        }else{
+            electric = electric + 0;
+        }
+        if(bills[i].water_bill){
+            water = water + bills[i].water_bill;
+        }else{
+            water = water + 0;
+        }
+        if(bills[i].other_bill){
+            other = other + bills[i].other_bill;
+        }else{
+            other = other + 0;
+        }
+    }
+    const result = {total: total, electric: electric, water: water, other: other};
+    return result;
+}
 //CREATE
 // module.exports.createBill = async (apart_id, electric_bill, water_bill, other_bill, month, year) =>{
 //     const total_money = electric_bill + water_bill + other_bill;

@@ -158,6 +158,17 @@ module.exports.getAllReportResolved = async (req, res, next) =>{
         res.status(500).json(error);
     }
 }
+module.exports.getTotalMoneyInMonth = async (req, res, next) =>{
+    try {
+        const {month, year} = req.params;
+        const total_money = await allBillServices.getTotalMoneyInMonth(month, year);
+        const unpaid = await allBillServices.getTotalUnpaidFee(month, year);
+        res.status(200).json({total: total_money, unpaid: unpaid});
+    } catch (error) {
+        console.log("errors: ",error);
+        res.status(500).json(error);
+    }
+}
 //CREATE
 module.exports.createBill = async (req, res, next) =>{
     try {
