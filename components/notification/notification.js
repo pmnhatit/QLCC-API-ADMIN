@@ -32,7 +32,6 @@ var notiSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     }
-    //author: String
 },
     {
         collection: 'notification'

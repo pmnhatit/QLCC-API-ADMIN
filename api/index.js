@@ -15,6 +15,7 @@ const user = require('../components/user');
 const uploadV2 = require('../components/uploadV2');
 const uploadCSV = require('../components/uploadCSV');
 const allBill = require('../components/allBill');
+const billNoti = require('../components/billNotification');
 
 router.use('/auth', auth);
 
@@ -45,5 +46,7 @@ router.use('/uploadv2', uploadV2);
 router.use('/upload-csv', uploadCSV);
 
 router.use('/all-bill', allBill);
+
+router.use('/bill-noti', billNoti);
 
 module.exports = router;

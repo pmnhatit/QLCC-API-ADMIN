@@ -6,7 +6,7 @@ const userServices = require('../user/userServices');
 module.exports.getAllNotification = async (page, limit)=>{
     const sk = (page-1)*limit;
     const l = parseInt(limit);
-    const result = notiModel.find({'is_delete': false},
+    const result = await notiModel.find({'is_delete': false},
         null,{
             skip: sk,
             limit: l
