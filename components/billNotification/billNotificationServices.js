@@ -1,3 +1,5 @@
+const mongoose = require('mongoose');
+
 const billNotiModel = require('./billNotification');
 //GET
 module.exports.getNotiById = async (noti_id) =>{
@@ -29,7 +31,13 @@ module.exports.createReminderNotice = async (apart_id, apart_name, month, year, 
 }
 module.exports.createStopServiceNotice = async (apart_id, apart_name, month, year) =>{
     const create_date = new Date().toLocaleString();
-    const content = `BQL chung cư xin thông báo ngừng cung cấp điện nước của căn hộ ${apart_name} từ ngày 10/${month}/${year} vì lý do chưa thanh toán các khoản chi phí cần thiết theo quy định. Đề nghị anh/chị liên hệ BQL để giải quyết.`;
+    let m = month, y = year;
+    if(month==12){
+        m = 1, y = y + 1;
+    }else{
+        m = m + 1;
+    }
+    const content = `BQL chung cư xin thông báo ngừng cung cấp điện nước của căn hộ ${apart_name} từ ngày 10/${m}/${y} vì lý do chưa thanh toán các khoản chi phí cần thiết theo quy định. Đề nghị anh/chị liên hệ BQL để giải quyết.`;
     const title = "Ngừng cung cấp điện nước";
     const type = 2;
     const is_confirm = false;
