@@ -62,8 +62,8 @@ module.exports.createStopServiceNotice = async (req, res, next) =>{
 }
 module.exports.createConfirmNotice = async (req, res, next) =>{
     try {
-        const {apart_id, apart_name} = req.body;
-        const noti = await billNotiServices.createConfirmNotice(apart_id, apart_name);
+        const {apart_id, content, title} = req.body;
+        const noti = await billNotiServices.createConfirmNotice(apart_id, content, title);
         if(noti){
             res.status(200).json({data: noti});
         }else{

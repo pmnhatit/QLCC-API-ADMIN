@@ -44,11 +44,11 @@ module.exports.createStopServiceNotice = async (apart_id, apart_name, month, yea
     const newNoti = new billNotiModel({title, content, create_date, receiver: apart_id, type, month, year, is_confirm});
     return await newNoti.save();
 }
-module.exports.createConfirmNotice = async (apart_id, apart_name) =>{
-    const create_date = new Date().toLocaleString();
-    const title = "Xác nhận khiếu nại";
-    const content = `BQL chung cư xác nhận căn hộ ${apart_name} đã thanh toán đầy đủ các chi phí cần thiết.`;
+module.exports.createConfirmNotice = async (apart_id, title, content) =>{
+    // const title = "Xác nhận khiếu nại";
+    // const content = `BQL chung cư xác nhận căn hộ ${apart_name} đã thanh toán đầy đủ các chi phí cần thiết.`;
     const type = 0;
+    const create_date = new Date().toLocaleString();
     const newNoti = new billNotiModel({title, content, create_date, receiver: apart_id, type});
     return await newNoti.save();
 }
