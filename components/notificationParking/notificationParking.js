@@ -24,7 +24,11 @@ var notiParkingSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    is_read: {
+    is_read_admin: {
+        type: Boolean,
+        default: false
+    },
+    is_read_user: {
         type: Boolean,
         default: false
     },
