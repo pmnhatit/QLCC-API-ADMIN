@@ -20,6 +20,10 @@ module.exports.getUserByUsername = async (username) =>{
     const result = await userModel.findOne({'username': username, 'is_delete': false});
     return result;
 }
+module.exports.getUserInactive = async () =>{//chua test
+    const users = await userModel.find({'is_active': false, 'is_delete': false});
+    return users;
+}
 //CREATE
 module.exports.createUser = async (username, name, phone, email, identify_card, native_place, 
     block_id, apartment_id, license_plates) =>{

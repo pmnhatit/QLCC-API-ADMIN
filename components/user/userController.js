@@ -81,6 +81,20 @@ module.exports.getUserById = async (req, res, next) =>{
         res.status(500).json(error);
     }
 }
+module.exports.getUserInactive = async (req, res, next) =>{//chua test
+    try {
+        const users = await userServices.getUserInactive();
+        let result = [];
+        for(let i=0; i<users.length; i++){
+            const user = {id: users[i]._id, name: users[i].name, apart_id: users[i].apartment_id};
+            result.push(user);
+        }
+        res.status(200).json({data: result});
+    } catch (error) {
+        console.log("errors: ", error);
+        res.status(500).json(error);
+    }
+}
 //CREATE
 module.exports.createUser = async (req, res, next) =>{
     try {

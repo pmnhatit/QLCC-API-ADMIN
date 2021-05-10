@@ -33,6 +33,10 @@ var userSchema = new mongoose.Schema({
         type: String,
         default: ""
     },
+    is_active: {//moi them
+        type: Boolean,
+        default: true
+    },
     is_delete: {
         type: Boolean,
         default: false

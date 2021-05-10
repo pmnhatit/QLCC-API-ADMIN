@@ -1,3 +1,4 @@
+const { parseString } = require("@fast-csv/parse");
 const admin = require("firebase-admin");
 
 const serviceAccount = require("./apartment-management-8187f-firebase-adminsdk-hf2xm-4b33869c4f.json");
@@ -5,11 +6,13 @@ admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
 });
 
-module.exports.sendMessageToDevices = async (tokens, noti) =>{
+module.exports.sendMessageToDevices = async (tokens, noti, type) =>{
     // Send a message to the devices corresponding to the provided
   // registration tokens.
+  let str = type.toString();
+  const data = {'type': str};
   const message = {
-    data: noti,
+    data: data,
     notification: noti,
     tokens: tokens,
   }

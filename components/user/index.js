@@ -8,6 +8,8 @@ router.get('/all', passPort.authenticate('jwt',{session: false}), userController
 
 router.get('/search', passPort.authenticate('jwt',{session: false}), userController.searchByLicensePlate);
 
+router.get('/inactive', passPort.authenticate('jwt',{session: false}), userController.getUserInactive);//chua test
+
 router.get('/:user_id', passPort.authenticate('jwt',{session: false}), userController.getUserById);
 
 router.post('/add', passPort.authenticate('jwt',{session: false}), userController.createUser);

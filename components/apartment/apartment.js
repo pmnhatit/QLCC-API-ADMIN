@@ -19,7 +19,7 @@ var apartmentSchema = new mongoose.Schema({
     status: {
         type: Number,
         default: 1
-    },//1: con trong | 2: da thue | 3: da ban
+    },//1: con trong | 2: da thue | 3: da ban | 4: khong nhan thong bao
     is_delete: {
         type: Boolean,
         default: false
