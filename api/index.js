@@ -17,6 +17,7 @@ const uploadCSV = require('../components/uploadCSV');
 const allBill = require('../components/allBill');
 const billNoti = require('../components/billNotification');
 const email = require('../components/email');
+const notiParking = require('../components/notificationParking');
 
 router.use('/auth', auth);
 
@@ -51,5 +52,7 @@ router.use('/all-bill', allBill);
 router.use('/bill-noti', billNoti);
 
 router.use('/email', email);
+
+router.use('/noti-parking', notiParking);
 
 module.exports = router;
