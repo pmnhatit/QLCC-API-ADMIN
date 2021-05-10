@@ -95,6 +95,21 @@ module.exports.getUserInactive = async (req, res, next) =>{//chua test
         res.status(500).json(error);
     }
 }
+module.exports.getTokenDeviceByApartId = async (req, res, next) =>{
+    try {
+        const {apart_id} = req.params;
+        const user = await userServices.getTokenDeviceByApartId(apart_id);
+        if(user==null){
+            res.status(400).json();
+        }else{
+            const token = user.token_device;
+            res.status(200).json({token_device: token});
+        }
+    } catch (error) {
+        console.log("errors: ", error);
+        res.status(500).json(error);
+    }
+}
 //CREATE
 module.exports.createUser = async (req, res, next) =>{
     try {

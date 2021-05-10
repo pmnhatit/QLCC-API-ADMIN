@@ -10,6 +10,8 @@ router.get('/search', passPort.authenticate('jwt',{session: false}), userControl
 
 router.get('/inactive', passPort.authenticate('jwt',{session: false}), userController.getUserInactive);//chua test
 
+router.get('/token-device/:apart_id', passPort.authenticate('jwt',{session: false}), userController.getTokenDeviceByApartId);
+
 router.get('/:user_id', passPort.authenticate('jwt',{session: false}), userController.getUserById);
 
 router.post('/add', passPort.authenticate('jwt',{session: false}), userController.createUser);
