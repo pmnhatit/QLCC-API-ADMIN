@@ -18,7 +18,10 @@ module.exports.getNoticesUnread = async () =>{
 //CREATE
 module.exports.createNotice = async (user_id, title, content) =>{
     const author = "admin0";
-    const create_date = new Date().toLocaleString();
+    const d = new Date();
+    const utc = d.getTime() + (d.getTimezoneOffset() * 60000);
+    const nd = new Date(utc + (3600000*7));
+    const create_date = nd.toLocaleString();
     const notice = new notiParkingModel({title, content, create_date, author, receiver: user_id, is_read_admin: true, is_read_user: false, type: 1});
     return await notice.save();
 }

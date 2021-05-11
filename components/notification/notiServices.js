@@ -33,7 +33,10 @@ module.exports.createNotification = async (title, content, image, link, type) =>
             receivers.push(receiver);
         }
     }
-    const create_date = new Date().toLocaleString();
+    const d = new Date();
+    const utc = d.getTime() + (d.getTimezoneOffset() * 60000);
+    const nd = new Date(utc + (3600000*7));
+    const create_date = nd.toLocaleString();
     const newNoti = new notiModel({title, content, image, link, create_date, type, receivers});
     return await newNoti.save();
 }
