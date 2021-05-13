@@ -12,7 +12,7 @@ module.exports.getNoticesReport = async () =>{
     return result;
 }
 module.exports.getNoticesUnconfirm = async () =>{
-    const result = await notiParkingModel.find({'is_confirm': false, 'is_delete': false});
+    const result = await notiParkingModel.find({'is_confirm': false, 'type': 0, 'is_delete': false});
     return result;
 }
 // module.exports.getNoticesUnread = async () =>{
