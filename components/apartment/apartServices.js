@@ -5,22 +5,15 @@ const authServices = require('../auth/authServices');
 //const block = require('../block/block');
 //GET
 module.exports.getAllApartment = async (req) =>{
-    const {block_id} = req.query;
-    if(block_id){
-        const result = await apartmentModel.find({'block': block_id, 'is_delete': false},
+    const {...query} = req.query;
+    query.is_delete = false;
+    console.log(query);
+    const result = await apartmentModel.find(query,
         null,
         {
             sort: {name: 1}
         });
         return result;
-    }else{
-        const result = await apartmentModel.find({'is_delete': false},
-        null,
-        {
-            sort: {name: 1}
-        });
-        return result;
-    }
     
 }
 module.exports.getApartmentById = async (id) =>{

@@ -11,10 +11,14 @@ module.exports.getNoticesReport = async () =>{
     const result = await notiParkingModel.find({'type': 0, 'is_delete': false});
     return result;
 }
-module.exports.getNoticesUnread = async () =>{
-    const result = await notiParkingModel.find({'is_read_admin': false, 'is_delete': false});
+module.exports.getNoticesUnconfirm = async () =>{
+    const result = await notiParkingModel.find({'is_confirm': false, 'is_delete': false});
     return result;
 }
+// module.exports.getNoticesUnread = async () =>{
+//     const result = await notiParkingModel.find({'is_read_admin': false, 'is_delete': false});
+//     return result;
+// }
 //CREATE
 module.exports.createNotice = async (user_id, title, content) =>{
     const author = "admin0";

@@ -24,15 +24,24 @@ module.exports.getNoticesReport = async (req, res, next) =>{
         res.status(500).json(error);
     }
 }
-module.exports.getNoticesUnread = async (req, res, next) =>{
+module.exports.getNoticesUnconfirm= async (req, res, next) =>{
     try {
-        const notices = await notiParkingServices.getNoticesUnread();
-        res.status(200).json({unread: notices.length});
+        const notices = await notiParkingServices.getNoticesUnconfirm();
+        res.status(200).json({unconfirm: notices.length});
     } catch (error) {
         console.log("errors: ", error);
         res.status(500).json(error);
     }
 }
+// module.exports.getNoticesUnread = async (req, res, next) =>{
+//     try {
+//         const notices = await notiParkingServices.getNoticesUnread();
+//         res.status(200).json({unread: notices.length});
+//     } catch (error) {
+//         console.log("errors: ", error);
+//         res.status(500).json(error);
+//     }
+// }
 //CREATE
 module.exports.createNotice = async (req, res, next) =>{
     try {
