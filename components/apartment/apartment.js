@@ -20,14 +20,18 @@ var apartmentSchema = new mongoose.Schema({
         type: Number,
         default: 1
     },//1: con trong | 2: da thue | 3: da ban | 4: khong nhan thong bao
-    is_delete: {
-        type: Boolean,
-        default: false
+    owner: {//id chu can ho
+        type: String,
+        default: ""
     },
     description: {
         type: String, 
         default:""
-    }
+    },
+    is_delete: {
+        type: Boolean,
+        default: false
+    },
 },
     {
         collection: 'apartment'

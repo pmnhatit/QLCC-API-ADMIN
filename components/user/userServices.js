@@ -55,6 +55,15 @@ module.exports.updateLicensePlates = async (user_id, license_plates) =>{
     });
     return result;
 }
+module.exports.changeActiveStatus = async (user_id, status) =>{
+    mongoose.set('useFindAndModify', false);
+    const result = await userModel.findOneAndUpdate({'_id': user_id},
+    {'is_active': status},
+    {
+        new: true
+    });
+    return result;
+}
 //DELETE
 module.exports.deleteUser = async (user_id) =>{
     mongoose.set('useFindAndModify', false);

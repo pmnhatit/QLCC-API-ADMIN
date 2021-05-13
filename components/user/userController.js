@@ -235,6 +235,33 @@ module.exports.updateLicensePlates = async (req, res, next) =>{
         res.status(500).json(error);
     }
 }
+module.exports.changeActiveStatus = async (req, res, next) =>{
+    try {
+        const {user_id, status} = req.body;
+        if(user_id==undefined || status==undefined){
+            res.status(400).json({message: "Missed parameters"})
+        }else{
+            const user = await userServices.changeActiveStatus(user_id, status);
+            if(user==null){
+                res.status(400).json({message: "User id incorrect"});
+            }else{
+                if(status==false){
+                    for(let i=0; i<user.apartment_id.length; i++){
+                        await apartServices.updateApartStatus(user.apartment_id[i], 4);
+                    }
+                }else{
+                    for(let i=0; i<user.apartment_id.length; i++){
+                        await apartServices.updateApartStatus(user.apartment_id[i], 3);
+                    }
+                }
+                res.status(200).json({data: user});
+            }
+        }
+    } catch (error) {
+        console.log("errors: ", error);
+        res.status(500).json(error);
+    }
+}
 //DELETE
 module.exports.deleteUser = async (req, res, next) =>{
     try {

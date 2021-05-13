@@ -4,13 +4,24 @@ const apartmentModel = require('./apartment');
 const authServices = require('../auth/authServices');
 //const block = require('../block/block');
 //GET
-module.exports.getAllApartment = async () =>{
-    const result = await apartmentModel.find({'is_delete': false},
-    null,
-    {
-        sort: {name: 1}
-    });
-    return result;
+module.exports.getAllApartment = async (req) =>{
+    const {block_id} = req.query;
+    if(block_id){
+        const result = await apartmentModel.find({'block': block_id, 'is_delete': false},
+        null,
+        {
+            sort: {name: 1}
+        });
+        return result;
+    }else{
+        const result = await apartmentModel.find({'is_delete': false},
+        null,
+        {
+            sort: {name: 1}
+        });
+        return result;
+    }
+    
 }
 module.exports.getApartmentById = async (id) =>{
     const result = await apartmentModel.findOne({'_id': id, 'is_delete': false});
@@ -27,6 +38,10 @@ module.exports.getApartmentsByIdUser = async (user_id) =>{
 }
 module.exports.getAllApartsEmpty = async ()=>{
     const aparts = await apartmentModel.find({'status': 1, 'is_delete': false});
+    return aparts;
+}
+module.exports.getAllApartsInactive = async () =>{
+    const aparts = await apartmentModel.find({'status': 4, 'is_delete': false});
     return aparts;
 }
 //CREATE

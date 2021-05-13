@@ -2,9 +2,8 @@ const apartServices = require('./apartServices');
 //GET
 module.exports.getAllApartment = async (req, res, next) =>{
     try {
-        console.log("đã vô")
-        const apartments = await apartServices.getAllApartment();
-        res.json({data: apartments});
+        const apartments = await apartServices.getAllApartment(req);
+        res.status(200).json({data: apartments});
     } catch (error) {
         console.log("errors: ", error);
         res.status(500).json(error);
@@ -46,6 +45,15 @@ module.exports.createApartment = async (req, res, next) =>{
 module.exports.getAllApartsEmpty = async (req, res, next) =>{
     try {
         const aparts = await apartServices.getAllApartsEmpty();
+        res.status(200).json({data: aparts});
+    } catch (error) {
+        console.log("errors: ",error);
+        res.status(500).json(error);
+    }
+}
+module.exports.getAllApartsInactive = async (req, res, next) =>{
+    try {
+        const aparts = await apartServices.getAllApartsInactive();
         res.status(200).json({data: aparts});
     } catch (error) {
         console.log("errors: ",error);
