@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const apartmentModel = require('./apartment');
-const authServices = require('../auth/authServices');
+const userServices = require('../user/userServices');
 //const block = require('../block/block');
 //GET
 module.exports.getAllApartment = async (req) =>{
@@ -21,28 +21,13 @@ module.exports.getApartmentById = async (id) =>{
     return result;
 }
 module.exports.getApartmentsByIdUser = async (user_id) =>{
-    const user = await authServices.getUserById(user_id);
-    let aparts = [];
-    for(let i=0; i<user.apartment_id.length; i++){
-        const apart = await this.getApartmentById(user.apartment_id[i]);
-        aparts.push(apart);
-    }
-    return aparts;
+    const result = await apartmentModel.find({'owner.id': user_id, 'is_delete': false});
+    return result;
 }
 module.exports.getAllApartsEmpty = async ()=>{
     const aparts = await apartmentModel.find({'status': 1, 'is_delete': false});
     return aparts;
 }
-module.exports.getAllApartsInactive = async () =>{
-    const aparts = await apartmentModel.find({'status': 4, 'is_delete': false});
-    return aparts;
-}
-// module.exports.getApartOwner = async (apart_id)=>{
-//     const apart = await apartmentModel.findOne({'_id': apart_id})
-//     .populate('user')
-//     console.log(apart.owner);
-//     return apart.owner;
-// }
 //CREATE
 module.exports.createApartment = async (name, block, area, direction, type, images, description) =>{
     const new_apart = new apartmentModel({name, block, area, direction, type, images, description});

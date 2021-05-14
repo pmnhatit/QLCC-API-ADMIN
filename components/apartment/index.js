@@ -10,10 +10,6 @@ router.get('/all-aparts/:user_id', passPort.authenticate('jwt',{session: false})
 
 router.get('/aparts-empty', passPort.authenticate('jwt',{session: false}), apartController.getAllApartsEmpty);
 
-router.get('/aparts-inactive', passPort.authenticate('jwt',{session: false}), apartController.getAllApartsInactive);
-
-// router.get('/apart-owner', passPort.authenticate('jwt',{session: false}), apartController.getApartOwner);
-
 router.get('/:id', passPort.authenticate('jwt',{session: false}), apartController.getApartmentById);
 
 router.post('/add', passPort.authenticate('jwt',{session: false}), apartController.createApartment);
