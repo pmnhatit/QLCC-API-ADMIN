@@ -49,28 +49,11 @@ module.exports.createApartment = async (name, block, area, direction, type, imag
     return await new_apart.save();
 }
 //UPDATE
-module.exports.updateApartment = async (apart_id, name, block, area, direction, type, images, description) =>{
+module.exports.updateApartment = async (data) =>{
+    const {apart_id, ...query} = data;
     mongoose.set('useFindAndModify', false);
     const new_apart = await apartmentModel.findByIdAndUpdate({'_id': apart_id},
-    {'name': name, 'block': block, 'area': area, 'direction': direction, 'type': type, 'image': images, 'description': description},
-    {
-        new: true
-    })
-    return new_apart;
-}
-module.exports.updateApartStatus = async (apart_id, status) =>{
-    mongoose.set('useFindAndModify', false);
-    const new_apart = await apartmentModel.findByIdAndUpdate({'_id': apart_id},
-    {'status': status},
-    {
-        new: true
-    })
-    return new_apart;
-}
-module.exports.updateApartOwner = async (apart_id, user_id) =>{
-    mongoose.set('useFindAndModify', false);
-    const new_apart = await apartmentModel.findByIdAndUpdate({'_id': apart_id},
-    {'owner': user_id},
+    query,
     {
         new: true
     })

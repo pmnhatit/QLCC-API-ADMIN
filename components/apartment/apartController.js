@@ -73,9 +73,12 @@ module.exports.getAllApartsInactive = async (req, res, next) =>{
 //UPDATE
 module.exports.updateApartment = async (req, res, next) =>{
     try {
-        const {apart_id, name, block, area, direction, type, images, description} = req.body;
-        const apartment = await apartServices.updateApartment(apart_id, name, block, area, direction, type, images, description);
-        res.status(200).json({data: apartment});
+        const apartment = await apartServices.updateApartment(req.body);
+        if(apartment){
+            res.status(200).json({data: apartment});
+        }else{
+            res.status(400).json({message: "Parameter incorrect"});
+        }
     } catch (error) {
         console.log("errors: ", error);
         res.status(500).json(error);
@@ -95,6 +98,20 @@ module.exports.updateApartOwner = async (req, res, next) =>{
     try {
         const {apart_id, user_id} = req.body;
         const apart = await apartServices.updateApartOwner(apart_id, user_id);
+        if(apart){
+            res.status(200).json({data: apart});
+        }else{
+            res.status(400).json({message: "Parameter incorrect"});
+        }
+    } catch (error) {
+        console.log("errors: ", error);
+        res.status(500).json(error);
+    }
+}
+module.exports.updateOwnerStatus = async (req, res, next) =>{
+    try {
+        const {apart_id, status} = req.body;
+        const apart = await apartServices.updateOwnerStatus(apart_id, status);
         if(apart){
             res.status(200).json({data: apart});
         }else{

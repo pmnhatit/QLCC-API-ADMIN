@@ -19,11 +19,16 @@ var apartmentSchema = new mongoose.Schema({
     status: {
         type: Number,
         default: 1
-    },//1: con trong | 2: da thue | 3: da ban | 4: khong nhan thong bao
+    },//1: con trong | 2: da thue | 3: da ban 
     owner: {//id chu can ho
-        type: String,
-        default: "",
-        // ref: 'user'
+        id:{
+            type: String,
+            default: ""
+        },
+        is_active:{
+            type: Boolean,
+            default: true
+        }
     },
     description: {
         type: String, 

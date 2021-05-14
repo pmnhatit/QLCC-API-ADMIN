@@ -19,7 +19,7 @@ var userSchema = new mongoose.Schema({
     }],//bang so xe
     block_id: [{
         type: String,
-        default:""
+        default: ""
     }],
     apartment_id: [{
         type: String,
