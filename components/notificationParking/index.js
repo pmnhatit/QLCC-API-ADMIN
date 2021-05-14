@@ -4,7 +4,7 @@ const router = express.Router();
 const passPort = require('../../services/passport');
 const notiParkingController = require('./notiParkingController');
 
-router.get('/all-report', passPort.authenticate('jwt',{session: false}), notiParkingController.getNoticesReport);
+router.get('/allreport', passPort.authenticate('jwt',{session: false}), notiParkingController.getNoticesReport);
 
 // router.get('/unread', passPort.authenticate('jwt',{session: false}), notiParkingController.getNoticesUnread);
 

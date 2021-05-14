@@ -12,9 +12,13 @@ router.get('/aparts-empty', passPort.authenticate('jwt',{session: false}), apart
 
 router.get('/aparts-inactive', passPort.authenticate('jwt',{session: false}), apartController.getAllApartsInactive);
 
+// router.get('/apart-owner', passPort.authenticate('jwt',{session: false}), apartController.getApartOwner);
+
 router.get('/:id', passPort.authenticate('jwt',{session: false}), apartController.getApartmentById);
 
 router.post('/add', passPort.authenticate('jwt',{session: false}), apartController.createApartment);
+
+router.put('/update-owner', passPort.authenticate('jwt',{session: false}), apartController.updateApartOwner);
 
 router.put('/update', passPort.authenticate('jwt',{session: false}), apartController.updateApartment);
 

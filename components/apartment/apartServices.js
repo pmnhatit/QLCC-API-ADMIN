@@ -37,6 +37,12 @@ module.exports.getAllApartsInactive = async () =>{
     const aparts = await apartmentModel.find({'status': 4, 'is_delete': false});
     return aparts;
 }
+// module.exports.getApartOwner = async (apart_id)=>{
+//     const apart = await apartmentModel.findOne({'_id': apart_id})
+//     .populate('user')
+//     console.log(apart.owner);
+//     return apart.owner;
+// }
 //CREATE
 module.exports.createApartment = async (name, block, area, direction, type, images, description) =>{
     const new_apart = new apartmentModel({name, block, area, direction, type, images, description});
@@ -56,6 +62,15 @@ module.exports.updateApartStatus = async (apart_id, status) =>{
     mongoose.set('useFindAndModify', false);
     const new_apart = await apartmentModel.findByIdAndUpdate({'_id': apart_id},
     {'status': status},
+    {
+        new: true
+    })
+    return new_apart;
+}
+module.exports.updateApartOwner = async (apart_id, user_id) =>{
+    mongoose.set('useFindAndModify', false);
+    const new_apart = await apartmentModel.findByIdAndUpdate({'_id': apart_id},
+    {'owner': user_id},
     {
         new: true
     })
