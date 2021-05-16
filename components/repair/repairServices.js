@@ -27,17 +27,30 @@ module.exports.getRepairNoticeById = async (notice_id) =>{
     const result = await repairModel.findOne({'_id': notice_id, 'is_delete': false});
     return result;
 }
+module.exports.getRepairNotices = async (data) =>{
+    const {...query} = data;
+    query.is_delete = false;
+    const result = await repairModel.find(query,
+        null,
+        {
+            sort: {create_date: -1}
+        });
+        return result;
+}
 //CREATE
-// module.exports.createRepairNotice = async (title, content, author, image) =>{
-//     const create_date = new Date().toLocaleString();
-//     const newRepairNotice = new repairModel({title, content, create_date,
-//         author, image});
-//     return await newRepairNotice.save();
-// }
 //UPDATE
 module.exports.updateNoticeStatusById = async (notice_id, status) =>{
     mongoose.set('useFindAndModify', false);
     const result = await repairModel.findOneAndUpdate({'_id': notice_id, 'is_delete': false}, {$set: {'status': status}}, {
+        new: true
+    })
+    return result;
+}
+module.exports.updateConfirmImage = async (notice_id, image) =>{
+    mongoose.set('useFindAndModify', false);
+    const result = await repairModel.findOneAndUpdate({'_id': notice_id, 'is_delete': false},
+    {$set: {'confirm_image': image}}, 
+    {
         new: true
     })
     return result;

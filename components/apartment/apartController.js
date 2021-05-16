@@ -1,9 +1,16 @@
 const apartServices = require('./apartServices');
+// const {validateGetAllApartment} = require('../../services/validation/validationApartment');
 //GET
 module.exports.getAllApartment = async (req, res, next) =>{
     try {
-        const apartments = await apartServices.getAllApartment(req);
-        res.status(200).json({data: apartments});
+        // const valid = await validateGetAllApartment(req.params);
+        // console.log(req.params);
+        if(valid.error){
+            res.status(400).json({message: "Parameter incorrect"});
+        }else{
+            const apartments = await apartServices.getAllApartment(req);
+            res.status(200).json({data: apartments});
+        }
     } catch (error) {
         console.log("errors: ", error);
         res.status(500).json(error);

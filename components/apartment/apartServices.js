@@ -37,7 +37,7 @@ module.exports.createApartment = async (name, block, area, direction, type, imag
 module.exports.updateApartment = async (data) =>{
     const {apart_id, ...query} = data;
     mongoose.set('useFindAndModify', false);
-    const new_apart = await apartmentModel.findByIdAndUpdate({'_id': apart_id},
+    const new_apart = await apartmentModel.findByIdAndUpdate({'_id': apart_id, 'is_delete': false},
     query,
     {
         new: true

@@ -2,19 +2,30 @@ const mongoose = require('mongoose');
 var db = mongoose.connection;
 
 //create schame
-var repairSchema = new mongoose.Schema({//phai sua lai
+var repairSchema = new mongoose.Schema({
     title: String,
     content: String,
-    //appointment_date: String,
-    //apart_id: String,//ma chung cu
-    author: String,
-    create_date: {
+    author: {//id user
         type: String
     },
-    //receiver: Number,//1: admin, 2: user
+    apart_id:{
+        type: String,
+        default: ""
+    },
+    create_date: {
+        type: Number
+    },
     image: {
         type: String,
         default: ""
+    },
+    confirm_image: {
+        type: String,
+        default: ""
+    },
+    type: {
+        type: Number,
+        default: 0//0. Sua chua chung | 1. Tu sua chua | 2. Dich vu sua chua
     },
     is_read_admin: {
         type: Boolean,
@@ -24,12 +35,30 @@ var repairSchema = new mongoose.Schema({//phai sua lai
         type: Boolean,
         default: true
     },
+    evaluation:{//danh gia
+        is_evaluate: {
+            type: Boolean,
+            default: false
+        },
+        comment: {
+            type: String,
+            default: ""
+        },
+        image: {
+            type: String,
+            default: ""
+        },
+        is_like: {
+            type: Boolean,
+            default: true
+        }
+    },
     is_delete:{
         type: Boolean,
         default: false
     },
     status: {
-        type: Number,//0: chua xac nhan | 1: da xac nhan | 2: da sua xong
+        type: Number,//0: chua xac nhan | 1: da xac nhan | 2: da sua xong | 3. Khong duyet
         default: 0
     }
 },
