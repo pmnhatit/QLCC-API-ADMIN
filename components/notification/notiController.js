@@ -36,17 +36,17 @@ module.exports.createNotification = async (req, res, next) =>{
             // users = await userServices.getAllUserByBlockId(query.block_id);
             q = {block: query.block_id};
             aparts = await apartServices.getAllApartment(q);
-        }else if(type==="floor"){//chua xong
+        }else if(type==="floor"){
             const floor = query.floor;
             if(floor==1){
                 const floors = [floor, floor+1];
                 console.log("floors: ", floors);
-                aparts = await apartServices.getApartsByFloor(query.block_id, floors);
+                aparts = await apartServices.getApartsByFloor(query.block_id, floors, query.apart_id);
                 console.log('aparts', aparts);
             }else{
                 const floors = [floor-1, floor, floor+1];
                 console.log('floors', floors);
-                aparts = await apartServices.getApartsByFloor(query.block_id, floors);
+                aparts = await apartServices.getApartsByFloor(query.block_id, floors, query.apart_id);
                 console.log('aparts', aparts);
             }
         }else{

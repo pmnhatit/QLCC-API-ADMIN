@@ -28,8 +28,8 @@ module.exports.getAllApartsEmpty = async ()=>{
     const aparts = await apartmentModel.find({'status': 1, 'is_delete': false});
     return aparts;
 }
-module.exports.getApartsByFloor = async (block_id, floor) =>{
-    const aparts = await apartmentModel.find({'block': block_id, 'floor': {$in: floor}, 'is_delete': false});
+module.exports.getApartsByFloor = async (block_id, floor, apart_id) =>{
+    const aparts = await apartmentModel.find({'_id': {$ne: apart_id},'block': block_id, 'floor': {$in: floor}, 'is_delete': false});
     return aparts;
 }
 //CREATE
