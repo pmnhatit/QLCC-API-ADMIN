@@ -4,8 +4,8 @@ const apartmentModel = require('./apartment');
 const userServices = require('../user/userServices');
 //const block = require('../block/block');
 //GET
-module.exports.getAllApartment = async (req) =>{
-    const {...query} = req.query;
+module.exports.getAllApartment = async (data) =>{
+    const {...query} = data;
     query.is_delete = false;
     console.log(query);
     const result = await apartmentModel.find(query,
@@ -28,9 +28,13 @@ module.exports.getAllApartsEmpty = async ()=>{
     const aparts = await apartmentModel.find({'status': 1, 'is_delete': false});
     return aparts;
 }
+module.exports.getApartsByFloor = async (block_id, floor) =>{
+    const aparts = await apartmentModel.find({'block': block_id, 'floor': {$in: floor}, 'is_delete': false});
+    return aparts;
+}
 //CREATE
-module.exports.createApartment = async (name, block, area, direction, type, images, description) =>{
-    const new_apart = new apartmentModel({name, block, area, direction, type, images, description});
+module.exports.createApartment = async (name, block, floor, area, direction, type, images, description) =>{
+    const new_apart = new apartmentModel({name, block, floor, area, direction, type, images, description});
     return await new_apart.save();
 }
 //UPDATE

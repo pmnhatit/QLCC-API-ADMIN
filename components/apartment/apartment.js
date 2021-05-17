@@ -5,6 +5,9 @@ var db = mongoose.connection;
 var apartmentSchema = new mongoose.Schema({
     name: String,
     block: String,
+    floor: {
+        type: Number
+    },
     area: Number,
     direction: {
         type: String//Huong nha

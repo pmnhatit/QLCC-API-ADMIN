@@ -6,7 +6,9 @@ var db = mongoose.connection;
 var notiSchema = new mongoose.Schema({
     title: String,
     content: String,
-    create_date: String,
+    create_date: {
+        type: Number
+    },
     image: {
         type: String,
         default: ""
@@ -15,9 +17,9 @@ var notiSchema = new mongoose.Schema({
         type: String,
         default: ""
     },
-    type: {
-        type: String//"0": all | block_id
-    },
+    // type: {
+    //     type: String//"all": all | block_id | "1,2,3...": floor | user_id
+    // },
     receivers: [
         {
             user_id: {

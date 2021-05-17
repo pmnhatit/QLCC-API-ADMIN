@@ -5,12 +5,12 @@ module.exports.getAllApartment = async (req, res, next) =>{
     try {
         // const valid = await validateGetAllApartment(req.params);
         // console.log(req.params);
-        if(valid.error){
-            res.status(400).json({message: "Parameter incorrect"});
-        }else{
-            const apartments = await apartServices.getAllApartment(req);
+        // if(valid.error){
+        //     res.status(400).json({message: "Parameter incorrect"});
+        // }else{
+            const apartments = await apartServices.getAllApartment(req.query);
             res.status(200).json({data: apartments});
-        }
+        // }
     } catch (error) {
         console.log("errors: ", error);
         res.status(500).json(error);
@@ -49,8 +49,8 @@ module.exports.getAllApartsEmpty = async (req, res, next) =>{
 //CREATE
 module.exports.createApartment = async (req, res, next) =>{
     try {
-        const {name, block, area, direction, type, images, description} = req.body;
-        const new_apart = await apartServices.createApartment(name, block, area, direction, type, images, description);
+        const {name, block, floor, area, direction, type, images, description} = req.body;
+        const new_apart = await apartServices.createApartment(name, block, floor, area, direction, type, images, description);
         res.status(200).json({data: new_apart});
     } catch (error) {
         console.log("errors: ",error);
