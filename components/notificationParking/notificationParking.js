@@ -6,7 +6,9 @@ var db = mongoose.connection;
 var notiParkingSchema = new mongoose.Schema({
     title: String,
     content: String,
-    create_date: String,
+    create_date: {
+        type: Number
+    },
     image: {
         type: String,
         default: ""

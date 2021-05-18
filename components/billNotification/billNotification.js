@@ -5,7 +5,9 @@ var db = mongoose.connection;
 var billNotiSchema = new mongoose.Schema({
     title: String,
     content: String,
-    create_date: String,
+    create_date: {
+        type: Number
+    },
     month: Number,
     year: Number,
     receiver:{

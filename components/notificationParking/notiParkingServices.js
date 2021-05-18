@@ -15,17 +15,13 @@ module.exports.getNoticesUnconfirm = async () =>{
     const result = await notiParkingModel.find({'is_confirm': false, 'type': 0, 'is_delete': false});
     return result;
 }
-// module.exports.getNoticesUnread = async () =>{
-//     const result = await notiParkingModel.find({'is_read_admin': false, 'is_delete': false});
-//     return result;
-// }
 //CREATE
 module.exports.createNotice = async (user_id, title, content) =>{
     const author = "admin0";
     const d = new Date();
     const utc = d.getTime() + (d.getTimezoneOffset() * 60000);
     const nd = new Date(utc + (3600000*7));
-    const create_date = nd.toLocaleString();
+    const create_date = nd.valueOf();
     const notice = new notiParkingModel({title, content, create_date, author, receiver: user_id, is_read_admin: true, is_read_user: false, type: 1});
     return await notice.save();
 }
