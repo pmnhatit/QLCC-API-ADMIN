@@ -113,7 +113,8 @@ module.exports.importCSV = async (req, res, next) =>{
                 res.status(400).json({message: "Incorrect file format "});
             }
             let data = [], wrong_name = [];
-            const aparts = await apartServices.getAllApartment();
+            const q = {};
+            const aparts = await apartServices.getAllApartment(q);
             for(let i=1; i<csvData.length; i++){
                 const found = aparts.find(apart => apart.name===csvData[i][0]);
                 console.log(found);
