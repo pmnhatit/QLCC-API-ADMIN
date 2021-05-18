@@ -26,9 +26,7 @@ module.exports.createReminderNotice = async (apart_id, apart_name, month, year, 
     const title = "Nhắc nhở thanh toán điện nước";
     const type = 1;
     const d = new Date();
-    const utc = d.getTime() + (d.getTimezoneOffset() * 60000);
-    const nd = new Date(utc + (3600000*7));
-    const create_date = nd.valueOf();
+    const create_date = d.valueOf();
     const newNoti = new billNotiModel({title, content, create_date, receiver: apart_id, type, month, year});
     return await newNoti.save();
 }
@@ -45,9 +43,7 @@ module.exports.createStopServiceNotice = async (apart_id, apart_name, month, yea
     const type = 2;
     const is_confirm = false;
     const d = new Date();
-    const utc = d.getTime() + (d.getTimezoneOffset() * 60000);
-    const nd = new Date(utc + (3600000*7));
-    const create_date = nd.valueOf();
+    const create_date = d.valueOf();
     const newNoti = new billNotiModel({title, content, create_date, receiver: apart_id, type, month, year, is_confirm});
     return await newNoti.save();
 }
@@ -56,9 +52,7 @@ module.exports.createConfirmNotice = async (apart_id, title, content) =>{
     // const content = `BQL chung cư xác nhận căn hộ ${apart_name} đã thanh toán đầy đủ các chi phí cần thiết.`;
     const type = 0;
     const d = new Date();
-    const utc = d.getTime() + (d.getTimezoneOffset() * 60000);
-    const nd = new Date(utc + (3600000*7));
-    const create_date = nd.valueOf();
+    const create_date = d.valueOf();
     const newNoti = new billNotiModel({title, content, create_date, receiver: apart_id, type});
     return await newNoti.save();
 }

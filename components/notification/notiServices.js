@@ -14,37 +14,9 @@ module.exports.getAllNotification = async (page, limit)=>{
     return result;
 }
 //CREATE
-// module.exports.createNotification = async (title, content, image, link, type) =>{
-//     let receivers = [];
-//     if(type==="all"){
-//         const users = await userServices.getAllUser();
-//         for(let i=0; i<users.length; i++){
-//             const receiver = {
-//                 user_id: users[i]._id            
-//             }
-//             receivers.push(receiver);
-//         }
-//     }else{
-//         const users = await userServices.getAllUserByBlockId(type);
-//         for(let i=0; i<users.length; i++){
-//             const receiver = {
-//                 user_id: users[i]._id            
-//             }
-//             receivers.push(receiver);
-//         }
-//     }
-//     const d = new Date();
-//     const utc = d.getTime() + (d.getTimezoneOffset() * 60000);
-//     const nd = new Date(utc + (3600000*7));
-//     const create_date = nd.toLocaleString();
-//     const newNoti = new notiModel({title, content, image, link, create_date, type, receivers});
-//     return await newNoti.save();
-// }
 module.exports.createNotification = async (title, content, image, link, receivers) =>{
     const d = new Date();
-    const utc = d.getTime() + (d.getTimezoneOffset() * 60000);
-    const nd = new Date(utc + (3600000*7));
-    const create_date = nd.valueOf();
+    const create_date = d.valueOf();
     const newNoti = new notiModel({title, content, image, link, create_date, receivers});
     return await newNoti.save();
 }
