@@ -41,7 +41,9 @@ module.exports.getRepairNotices = async (data) =>{
 //UPDATE
 module.exports.updateNoticeStatusById = async (notice_id, status) =>{
     mongoose.set('useFindAndModify', false);
-    const result = await repairModel.findOneAndUpdate({'_id': notice_id, 'is_delete': false}, {$set: {'status': status}}, {
+    const result = await repairModel.findOneAndUpdate({'_id': notice_id, 'is_delete': false}, 
+    {$set: {'status': status, 'is_read_user': false}}, 
+    {
         new: true
     })
     return result;
