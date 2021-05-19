@@ -9,8 +9,9 @@ module.exports.getAllNotification = async (page, limit)=>{
     const result = await notiModel.find({'is_delete': false},
         null,{
             skip: sk,
-            limit: l
-        }).sort({$natural: -1});
+            limit: l,
+            sort: {create_date: -1}
+        });
     return result;
 }
 //CREATE

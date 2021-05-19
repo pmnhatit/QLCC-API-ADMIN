@@ -8,8 +8,9 @@ module.exports.getAllRepairNotices = async (page, limit) =>{
     null,
     {
         skip: sk,
-        limit: l
-    }).sort({$natural: -1});
+        limit: l,
+        sort: {create_date: -1}
+    });
     return result;
 }
 module.exports.getAllRepairNoticesByIdUser = async (user_id, page, limit) =>{
@@ -19,8 +20,9 @@ module.exports.getAllRepairNoticesByIdUser = async (user_id, page, limit) =>{
     null,
     {
         skip: sk,
-        limit: l
-    }).sort({$natural: -1});
+        limit: l,
+        sort: {create_date: -1}
+    });
     return result;
 }
 module.exports.getRepairNoticeById = async (notice_id) =>{

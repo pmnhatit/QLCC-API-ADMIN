@@ -8,7 +8,11 @@ module.exports.getNoticeById = async (notice_id) =>{
     return result;
 }
 module.exports.getNoticesReport = async () =>{
-    const result = await notiParkingModel.find({'type': 0, 'is_delete': false});
+    const result = await notiParkingModel.find({'type': 0, 'is_delete': false},
+    null,
+    {
+        sort: {create_date: -1}
+    });
     return result;
 }
 module.exports.getNoticesUnconfirm = async () =>{

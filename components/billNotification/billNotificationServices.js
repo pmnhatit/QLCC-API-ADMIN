@@ -12,12 +12,17 @@ module.exports.getNotiByApartId = async (apart_id, page, limit) =>{
     const result = await billNotiModel.find({'receiver': apart_id, 'is_delete': false},
         null,{
             skip: sk,
-            limit: l
-        }).sort({$natural: -1});
+            limit: l,
+            sort: {create_date: -1}
+        });
     return result;
 }
 module.exports.getNotiStopService = async (confirm_status) =>{//lay danh sach thong bao cat dien nuoc
-    const result = await billNotiModel.find({'type': 2, 'is_confirm': confirm_status, 'is_delete': false});
+    const result = await billNotiModel.find({'type': 2, 'is_confirm': confirm_status, 'is_delete': false},
+    null,
+    {
+        sort: {create_date: -1}
+    });
     return result;
 }
 //CREATE
