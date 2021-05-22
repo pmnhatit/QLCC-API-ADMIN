@@ -13,21 +13,10 @@ module.exports.getAllNotification = async (req, res, next) =>{
     }
 }
 //CREATE
-// module.exports.createNotification = async (req, res, next) =>{
-//     try {
-//         const {title, content, type, image, link} = req.body;
-//         const newNoti = await notiServices.createNotification(title, content, image, link, type);
-//         // console.log("new: ",newNoti);
-//         res.status(200).json({data: newNoti});
-//     } catch (error) {
-//         console.log("errors: ", error);
-//         res.status(500).json(error);
-//     }
-// }
 module.exports.createNotification = async (req, res, next) =>{
     try {
         const {title, content, type, image, link, ...query} = req.body;
-        let receivers = [], users, aparts;
+        let receivers = [], users, aparts, ids = [];
         let q = {};
         if(type==="all"){
             // users = await userServices.getAllUser();
@@ -59,15 +48,17 @@ module.exports.createNotification = async (req, res, next) =>{
                         user_id : aparts[i].owner.id
                     }
                     receivers.push(user);
+                    ids.push(aparts[i].owner.id);
                 }
             }
         }else{
             const user = {user_id: users._id};
             receivers.push(user);
+            ids.push(users._id);
         }
-        console.log("receivers", receivers);
+        const tokens_device = await userServices.getTokenDevice(ids);
         const newNoti = await notiServices.createNotification(title, content, image, link, receivers);
-        res.status(200).json({data: newNoti});
+        res.status(200).json({data: newNoti, tokens_device: tokens_device});
     } catch (error) {
         console.log("errors: ",error);
         res.status(500).json(error);

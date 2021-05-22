@@ -18,6 +18,8 @@ const allBill = require('../components/allBill');
 const billNoti = require('../components/billNotification');
 const email = require('../components/email');
 const notiParking = require('../components/notificationParking');
+const service = require('../components/service');
+const registerService = require('../components/registerService');
 
 router.use('/auth', auth);
 
@@ -54,5 +56,9 @@ router.use('/bill-noti', billNoti);
 router.use('/email', email);
 
 router.use('/noti-parking', notiParking);
+
+router.use('/service', service);
+
+router.use('/register-service', registerService);
 
 module.exports = router;

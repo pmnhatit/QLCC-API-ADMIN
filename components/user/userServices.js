@@ -28,6 +28,17 @@ module.exports.getTokenDeviceByApartId = async (apart_id) =>{
     const user = await userModel.findOne({'apartment_id': apart_id, 'is_delete': false});
     return user;
 }
+module.exports.getTokenDevice = async (data) =>{
+    const users = await userModel.find({'_id': {$in: data}, 'is_delete': false});
+    let tokens = [];
+    for(let i=0; i<users.length; i++){
+        if(users[i].token_device!="" && !tokens.includes(users[i].token_device)){
+            const token = users[i].token_device;
+            tokens.push(token);
+        }
+    }
+    return tokens;
+}
 //CREATE
 module.exports.createUser = async (username, name, phone, email, identify_card, native_place, 
     block_id, apartment_id, license_plates) =>{
