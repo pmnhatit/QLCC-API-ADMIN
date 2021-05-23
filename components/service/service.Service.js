@@ -4,17 +4,17 @@ const mongoose = require('mongoose');
 module.exports.getServices = async (data) =>{
     const {...query} = data;
     query.is_delete = false;
-    const newDate = new Date( 2021, 4, 23);
-    const timestamp = newDate.getTime();
-    console.log(timestamp);
-    var date = new Date(timestamp);
+    // const newDate = new Date( 2021, 4, 31);
+    // const timestamp = newDate.getTime();
+    // console.log(timestamp);
+    // var date = new Date(timestamp);
 
-    console.log("Date: "+date.getDate()+
-        "/"+(date.getMonth()+1)+
-        "/"+date.getFullYear()+
-        " "+date.getHours()+
-        ":"+date.getMinutes()+
-        ":"+date.getSeconds());
+    // console.log("Date: "+date.getDate()+
+    //     "/"+(date.getMonth()+1)+
+    //     "/"+date.getFullYear()+
+    //     " "+date.getHours()+
+    //     ":"+date.getMinutes()+
+    //     ":"+date.getSeconds());
     const result = await serviceModel.find(query,
         null,
         {
@@ -22,6 +22,19 @@ module.exports.getServices = async (data) =>{
     });
     return result;
 }
+// module.exports.test = async(date) =>{
+//     const q = {};
+//     const services = await this.getServices(q);
+//     const found = services.find(service => service._id="60a86f13f30fc93d6c91cabf");
+//     console.log("service", found);
+//     let term = [];
+//     for(let i=0; i<found.registed.length; i++){
+//         if(found.registed[i].date==date){
+//             term.push(found.registed[i].term);
+//         }
+//     }
+//     return term;
+// }
 //CREATE
 module.exports.createService = async (data) =>{
     const {...query} = data;

@@ -36,6 +36,6 @@ var serviceSchema = new mongoose.Schema({
         collection: 'service'
     });
 
-const apartment = db.useDb("qlcc").model("service", serviceSchema);
+const service = db.useDb("qlcc").model("service", serviceSchema);
 
-module.exports = apartment;
+module.exports = service;

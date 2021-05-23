@@ -20,6 +20,7 @@ const email = require('../components/email');
 const notiParking = require('../components/notificationParking');
 const service = require('../components/service');
 const registerService = require('../components/registerService');
+const post = require('../components/post');
 
 router.use('/auth', auth);
 
@@ -60,5 +61,7 @@ router.use('/noti-parking', notiParking);
 router.use('/service', service);
 
 router.use('/register-service', registerService);
+
+router.use('/post', post);
 
 module.exports = router;

@@ -42,6 +42,6 @@ var registerServiceSchema = new mongoose.Schema({
         collection: 'register_service'
     });
 
-const apartment = db.useDb("qlcc").model("register_service", registerServiceSchema);
+const registerService = db.useDb("qlcc").model("register_service", registerServiceSchema);
 
-module.exports = apartment;
+module.exports = registerService;

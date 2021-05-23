@@ -10,6 +10,16 @@ module.exports.getServices = async (req, res, next) =>{
         res.status(500).json(error);
     }
 }
+// module.exports.test = async (req, res, next) =>{
+//     try {
+//         const {date} = req.query;
+//         const term = await service_Services.test(date);
+//         res.status(200).json({data: term});
+//     } catch (error) {
+//         console.log("errors: ",error);
+//         res.status(500).json(error);
+//     }
+// }
 //CREATE
 module.exports.createService = async (req, res, next) =>{
     try {
