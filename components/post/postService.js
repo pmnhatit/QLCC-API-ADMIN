@@ -40,3 +40,13 @@ module.exports.changeIsRead = async (post_id) =>{
     });
     return result;
 }
+//DELETE
+module.exports.deletePost = async (post_id) =>{
+    mongoose.set('useFindAndModify', false);
+    const result = await postModel.findOneAndUpdate({'_id': post_id}, 
+    {'is_delete': true}, 
+    {
+        new: true
+    });
+    return result;
+}

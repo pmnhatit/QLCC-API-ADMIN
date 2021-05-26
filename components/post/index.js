@@ -12,4 +12,6 @@ router.put('/reject-post', passPort.authenticate('jwt',{session: false}), postCo
 
 router.put('/change-is-read', passPort.authenticate('jwt',{session: false}), postController.changeIsRead);
 
+router.delete('/delete', passPort.authenticate('jwt',{session: false}), postController.deletePost);
+
 module.exports = router;

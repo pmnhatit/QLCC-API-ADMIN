@@ -66,3 +66,18 @@ module.exports.changeIsRead = async (req, res, next) =>{
         res.status(500).json(error);
     }
 }
+//DELETE
+module.exports.deletePost = async (req, res, next) =>{
+    try {
+        const {post_id} = req.body;
+        const post = await postServices.deletePost(post_id);
+        if(post==null){
+            res.status(400).json({message: "Parameter incorrect"});
+        }else{
+            res.status(200).json();
+        }
+    } catch (error) {
+        console.log("errors: ",error);
+        res.status(500).json(error);
+    }
+}
