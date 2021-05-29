@@ -40,11 +40,11 @@ module.exports.getTokenDevice = async (data) =>{
     return tokens;
 }
 //CREATE
-module.exports.createUser = async (username, name, phone, email, identify_card, native_place, 
+module.exports.createUser = async (name, phone, email, identify_card, native_place, 
     block_id, apartment_id, license_plates) =>{
         let hash = bcrypt.hashSync(phone, bcrypt.genSaltSync(10));//pass la phone
-        const new_user = new userModel({username, password: hash, name, phone, email, identify_card, 
-            native_place, block_id, apartment_id, license_plates});
+        const new_user = new userModel({username: identify_card, password: hash, name, phone, email, identify_card, 
+            native_place, block_id, apartment_id, license_plates});//username is identify card
         return await new_user.save();
     }
 //UPDATE

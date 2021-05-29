@@ -37,6 +37,14 @@ var userSchema = new mongoose.Schema({
         type: Boolean,
         default: true
     },
+    reset_code: {
+        type: String,
+        default: ""
+    },
+    time_reset_code:{
+        type: Number,
+        default: 0
+    },
     is_delete: {
         type: Boolean,
         default: false

@@ -31,7 +31,8 @@ module.exports.getAllUser = async (req, res, next) =>{
                 block_id: users[i].block_id,
                 block_name: blocks,
                 license_plates: users[i].license_plates,
-                is_delete: users[i].is_delete
+                is_active: users[i].is_active,
+                is_delete: users[i].is_delete,
             }
             data.push(user);
         }
@@ -70,6 +71,7 @@ module.exports.getUserById = async (req, res, next) =>{
                 block_id: user.block_id,
                 block_name: blocks,
                 license_plates: user.license_plates,
+                is_active: user.is_active,
                 is_delete: user.is_delete
             }
             res.status(200).json({data: data});
@@ -113,13 +115,13 @@ module.exports.getTokenDeviceByApartId = async (req, res, next) =>{
 //CREATE
 module.exports.createUser = async (req, res, next) =>{
     try {
-        const {username, name, phone, email, identify_card, 
+        const {name, phone, email, identify_card, 
             native_place, block_id, apartment_id, license_plates} = req.body;
-        const user = await userServices.getUserByUsername(username);
+        const user = await userServices.getUserByUsername(identify_card);
         if(user){
-            res.status(401).json({message:"user_exists"});
+            res.status(400).json({message:"user_exists"});
         }else{
-            const new_user = await userServices.createUser(username, name, phone, email, identify_card, 
+            const new_user = await userServices.createUser(name, phone, email, identify_card, 
                 native_place, block_id, apartment_id, license_plates);
                 let aparts = [], blocks = [];
             for(let j=0; j<new_user.apartment_id.length; j++){
@@ -145,6 +147,7 @@ module.exports.createUser = async (req, res, next) =>{
                 block_id: new_user.block_id,
                 block_name: blocks,
                 license_plates: new_user.license_plates,
+                is_active: new_user.is_active,
                 is_delete: new_user.is_delete
             }
             res.status(200).json({data: data});
@@ -184,6 +187,7 @@ module.exports.updateApartOfUser = async (req, res, next) =>{
                 block_id: user.block_id,
                 block_name: blocks,
                 license_plates: user.license_plates,
+                is_active: user.is_active,
                 is_delete: user.is_delete
             }
             res.status(200).json({data: data});
@@ -224,6 +228,7 @@ module.exports.updateLicensePlates = async (req, res, next) =>{
                 block_id: user.block_id,
                 block_name: blocks,
                 license_plates: user.license_plates,
+                is_active: user.is_active,
                 is_delete: user.is_delete
             }
             res.status(200).json({data: data});
@@ -313,6 +318,7 @@ module.exports.searchByLicensePlate = async (req, res, next) =>{
                     block_id: users[i].block_id,
                     block_name: blocks,
                     license_plates: users[i].license_plates,
+                    is_active: users[i].is_active,
                     is_delete: users[i].is_delete
                 }
                 data.push(user);
