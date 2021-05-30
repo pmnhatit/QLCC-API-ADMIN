@@ -8,7 +8,7 @@ router.get('/all-services', passPort.authenticate('jwt',{session: false}), servi
 
 router.post('/create', passPort.authenticate('jwt',{session: false}), serviceController.createService);
 
-router.put('/update-registed', passPort.authenticate('jwt',{session: false}), serviceController.updateRegisted);
+// router.put('/update-registed', passPort.authenticate('jwt',{session: false}), serviceController.updateRegisted);
 
 router.put('/update', passPort.authenticate('jwt',{session: false}), serviceController.updateService);
 

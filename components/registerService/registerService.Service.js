@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const registerServiceModel = require('./registerService');
+const serviceModel = require('../service/service.Service');
 
 //GET
 module.exports.getRegisterService = async (data) =>{
@@ -37,12 +38,17 @@ module.exports.updateRejectService = async (register_id, reason) =>{
     });
     return result;
 }
-module.exports.updateConfirmRegister = async (register_id) =>{
+module.exports.updateConfirmRegister = async (register_id, service_id, registed) =>{
     mongoose.set('useFindAndModify', false);
-    const result = await registerServiceModel.findOneAndUpdate({'_id': register_id, 'is_delete': false}, 
-    {'status': 1, 'is_read_admin': true, 'is_read_user': false}, 
-    {
-        new: true
-    });
-    return result;
+    const service = await serviceModel.updateRegisted(service_id, registed);
+    if(service==null){
+        return null;
+    }else{
+        const result = await registerServiceModel.findOneAndUpdate({'_id': register_id, 'is_delete': false}, 
+        {'status': 1, 'is_read_admin': true, 'is_read_user': false}, 
+        {
+            new: true
+        });
+        return result;
+    }
 }

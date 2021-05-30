@@ -52,8 +52,8 @@ module.exports.changeIsRead = async (req, res, next) =>{
 }
 module.exports.updateConfirmRegister = async (req, res, next) =>{
     try {
-        const {register_id} = req.body;
-        const register = await registerService.updateConfirmRegister(register_id);
+        const {register_id, service_id, registed} = req.body;
+        const register = await registerService.updateConfirmRegister(register_id, service_id, registed);
         if(register==null){
             res.status(400).json({message: "Parameter incorrect"});
         }else{
