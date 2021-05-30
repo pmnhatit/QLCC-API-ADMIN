@@ -7,7 +7,6 @@ const userServices = require('../user/userServices');
 module.exports.getAllApartment = async (data) =>{
     const {...query} = data;
     query.is_delete = false;
-    console.log(query);
     const result = await apartmentModel.find(query,
         null,
         {
