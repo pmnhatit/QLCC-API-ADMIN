@@ -89,11 +89,6 @@ module.exports.getTotalUnpaidFee = async (month, year) =>{
     return result;
 }
 //CREATE
-// module.exports.createBill = async (apart_id, electric_bill, water_bill, other_bill, month, year) =>{
-//     const total_money = electric_bill + water_bill + other_bill;
-//     const new_bill = new allBillModel({apart_id, electric_bill, water_bill, other_bill, total_money, month, year});
-//     return await new_bill.save();
-// }
 //UPDATE
 module.exports.changeIsPay = async (bill_id, status) =>{
     mongoose.set('useFindAndModify', false);
