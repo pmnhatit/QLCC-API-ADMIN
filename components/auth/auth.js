@@ -20,7 +20,7 @@ var authSchema = new mongoose.Schema({
         default: ""
     },
     role: {
-        type: Number,//0: superadmin | 1: admin
+        type: Number,//0: superadmin | 1: admin | 2: technical staff
         default: 1
     },
     is_delete: {

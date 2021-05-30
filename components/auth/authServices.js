@@ -20,23 +20,28 @@ module.exports.getAllUser = async ()=>{
     const result = await authModel.find({'role': 1, 'is_delete': false});
     return result;
 }
+module.exports.getAdmin = async (data) =>{
+    const {...query} = data;
+    query.is_delete = false;
+    const result = await authModel.find(query, {password: 0});
+    return result;
+}
 //CREATE
-module.exports.createUser = async (username, password, name, phone, email) =>{
+module.exports.createUser = async (username, password, name, phone, email, role) =>{
     console.log("Vo create");
     let hash = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
-    const newUser = new authModel({ username, password: hash, name, phone, email});
+    const newUser = new authModel({ username, password: hash, name, phone, email, role});
     return await newUser.save();
 }
 //UPDATE
 module.exports.updateAvatar = async (user_id, avatar)=>{
-    const result = await authModel.updateOne({'_id': user_id},{$set: {'avatar': avatar}}, (err, doc)=>{
-        if (err) {
-            console.log("update document error");
-        } else {
-            console.log("update document success");
-            console.log(doc);
-        }
-    })
+    mongoose.set('useFindAndModify', false);
+    const result = await authModel.findOneAndUpdate({'_id': user_id}, 
+    {$set:{'avatar': avatar}},
+    {
+        new: true
+    });
+    return result;
 }
 module.exports.updateInfo = async (user_id, name, phone, email) =>{
     mongoose.set('useFindAndModify', false);
@@ -48,14 +53,13 @@ module.exports.updateInfo = async (user_id, name, phone, email) =>{
     return result;
 }
 module.exports.updateTokenDevice = async (user_id, token_device) =>{
-    const result = await authModel.updateOne({'_id': user_id},{$set: {'token_device': token_device}}, (err, doc)=>{
-        if (err) {
-            console.log("update document error");
-        } else {
-            console.log("update document success");
-            console.log(doc);
-        }
-    })
+    mongoose.set('useFindAndModify', false);
+    const result = await authModel.findOneAndUpdate({'_id': user_id}, 
+    {$set:{'token_device': token_device}},
+    {
+        new: true
+    });
+    return result;
 } 
 module.exports.changePassword = async (user_id, password) =>{
     mongoose.set('useFindAndModify', false);

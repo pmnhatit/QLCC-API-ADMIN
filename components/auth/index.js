@@ -5,15 +5,17 @@ const passPort = require('../../services/passport');
 const authController = require('./authController')
 const author = require('../../middleware/authorization');
 
+router.get('/admin', passPort.authenticate('jwt',{session: false}), authController.getAdmin);
+
 router.get('/all', passPort.authenticate('jwt',{session: false}), authController.getAllUser);
 
-router.post('/login',passPort.authenticate('local',{session: false}), authController.login);
+router.post('/login', passPort.authenticate('local',{session: false}), authController.login);
 
 router.post('/add', passPort.authenticate('jwt',{session: false}), author, authController.createUser);
 
 router.put('/update-info', passPort.authenticate('jwt',{session: false}), authController.updateInfo);
 
-router.put('/update-avatar', authController.updateAvatar);
+router.put('/update-avatar', passPort.authenticate('jwt',{session: false}), authController.updateAvatar);
 
 router.put('/update-token-device', passPort.authenticate('jwt',{session: false}), authController.updateTokenDevice);
 

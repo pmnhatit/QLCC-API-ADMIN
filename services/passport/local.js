@@ -5,7 +5,7 @@ const bcrypt = require('bcryptjs');
 module.exports = new LocalStrategy({ session: false }, async (username, password, callback) => {
   // We use default {username: "catlover", password: "cat", id: 1} to authenticate.
   // You should use database to check for user credentials.
-  console.log("vô local")
+  console.log("vô local"); 
   const user = await authService.getUserByUsername(username);
   const noUser = {message: "null"};
   if(!user){

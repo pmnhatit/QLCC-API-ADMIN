@@ -8,6 +8,13 @@ jwtOptions.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
 jwtOptions.secretOrKey = process.env.KEY_SECRET;
 
 const authServices = require('./authServices');
+const {validateCreateAdmin, 
+    validateUpdateAvatar, 
+    validateUpdateInfo, 
+    validateUpdateTokenDevice,
+    validateChangePass,
+    validateDelete,
+    validateGetAdmin} = require('../../services/validation/validationAdmin');
 
 module.exports.login = async (req, res, next) =>{
     const user = req.user;
@@ -28,20 +35,25 @@ module.exports.login = async (req, res, next) =>{
 //CREATE
 module.exports.createUser = async(req, res , next) => {
     try {
-        const {username, password, name, phone, email} = req.body;
-        const user = await authServices.getUserByUsername(username);
-        console.log("user: ",user);
-        if(user){
-            res.status(401).json({message:"user_exists"});
+        const {username, password, name, phone, email, role} = req.body;
+        const valid = await validateCreateAdmin(req.body);
+        if(valid.error){
+            console.log(valid.error);
+            res.status(400).json({message: "Parameter incorrect!"});
         }else{
-            console.log("Vo else")
-            const newUser = await authServices.createUser(username, password, name, phone, email);
-            const payload = {username: newUser.username, id: newUser._id, role: newUser.role};
-            const token = jwt.sign(payload, jwtOptions.secretOrKey);
-            const infoUser = {_id: newUser._id, username: newUser.username, name: newUser.name, 
-                phone: newUser.phone, email: newUser.email, role: newUser.role, token_device: newUser.token_device, 
-                avatar: newUser.avatar, is_delete: newUser.is_delete};
-            res.json({token: token, infoUser: infoUser});
+            const user = await authServices.getUserByUsername(username);
+            console.log("user: ",user);
+            if(user){
+                res.status(401).json({message:"user_exists"});
+            }else{
+                const newUser = await authServices.createUser(username, password, name, phone, email, role);
+                const payload = {username: newUser.username, id: newUser._id, role: newUser.role};
+                const token = jwt.sign(payload, jwtOptions.secretOrKey);
+                const infoUser = {_id: newUser._id, username: newUser.username, name: newUser.name, 
+                    phone: newUser.phone, email: newUser.email, role: newUser.role, token_device: newUser.token_device, 
+                    avatar: newUser.avatar, is_delete: newUser.is_delete};
+                res.json({token: token, infoUser: infoUser});
+            }
         }
     } catch (error) {
         res.status(500).json({error:error});
@@ -57,12 +69,37 @@ module.exports.getAllUser = async (req, res, next) =>{
         res.status(500).json(error);
     }
 }
+module.exports.getAdmin = async (req, res, next) =>{
+    try {
+        const valid = await validateGetAdmin(req.query);
+        if(valid.error){
+            console.log(valid.error);
+            res.status(400).json({message: "Parameter incorrect!"});
+        }else{
+            const users = await authServices.getAdmin(req.query);
+            res.status(200).json({data: users});
+        }
+    } catch (error) {
+        console.log("errors: ", error);
+        res.status(500).json(error);
+    }
+}
 //UPDATE
 module.exports.updateInfo = async (req, res, next) =>{
     try {
         const {name, phone, email, user_id} = req.body;
-        const user = await authServices.updateInfo(user_id, name, phone, email);
-        res.status(200).json({data: user});
+        const valid = await validateUpdateInfo(req.body);
+        if(valid.error){
+            console.log(valid.error);
+            res.status(400).json({message: "Parameter incorrect!"});
+        }else{
+            const user = await authServices.updateInfo(user_id, name, phone, email);
+            if(user==null){
+                res.status(400).json({message: "Id user incorrect!"});
+            }else{
+                res.status(200).json({data: user});
+            }
+        }
     } catch (error) {
         console.log("error: ",error);
         res.status(500).json({error});
@@ -71,9 +108,18 @@ module.exports.updateInfo = async (req, res, next) =>{
 module.exports.updateAvatar = async (req, res, next) =>{
     try {
         const {user_id, avatar} = req.body;
-        await authServices.updateAvatar(user_id, avatar);
-        const new_auth = await authServices.getUserById(user_id);
-        res.status(200).json({data: new_auth.avatar});
+        const valid = await validateUpdateAvatar(req.body);
+        if(valid.error){
+            console.log(valid.error);
+            res.status(400).json({message: "Parameter incorrect!"});
+        }else{
+            const user = await authServices.updateAvatar(user_id, avatar);
+            if(user==null){
+                res.status(400).json({message: "Id user incorrect!"});
+            }else{
+                res.status(200).json({data: user.avatar});
+            }
+        }
     } catch (error) {
         console.log("errors: ",error);
         res.status(500).json({error});
@@ -82,9 +128,18 @@ module.exports.updateAvatar = async (req, res, next) =>{
 module.exports.updateTokenDevice = async (req, res, next) =>{
     try {
         const {user_id, token_device} = req.body;
-        await authServices.updateTokenDevice(user_id, token_device);
-        const new_auth = await authServices.getUserById(user_id);
-        res.status(200).json({data: new_auth.token_device});
+        const valid = await validateUpdateTokenDevice(req.body);
+        if(valid.error){
+            console.log(valid.error);
+            res.status(400).json({message: "Parameter incorrect!"});
+        }else{
+            const user = await authServices.updateTokenDevice(user_id, token_device);
+            if(user==null){
+                res.status(400).json({message: "Id user incorrect!"});
+            }else{
+                res.status(200).json({data: user.token_device});
+            }
+        }
     } catch (error) {
         console.log("errors: ",error);
         res.status(500).json(error);
@@ -93,14 +148,19 @@ module.exports.updateTokenDevice = async (req, res, next) =>{
 module.exports.changePassword = async (req, res, next) =>{
     try {
         const {user_id, new_pass, old_pass} = req.body;
-        const user = await authServices.getUserById(user_id);
-        const check = await authServices.checkOldPassword(user_id, old_pass);
-        console.log("check", check);
-        if(check==false){
-            res.status(400).json({message: "Current password is incorrect!"});
+        const valid = await validateChangePass(req.body);
+        if(valid.error){
+            console.log(valid.error);
+            res.status(400).json({message: "Parameter incorrect!"});
         }else{
-            const new_user = await authServices.changePassword(user_id, new_pass);
-            res.status(200).json({data: new_user});
+            // const user = await authServices.getUserById(user_id);
+            const check = await authServices.checkOldPassword(user_id, old_pass);
+            if(check==false){
+                res.status(400).json({message: "Current password is incorrect!"});
+            }else{
+                const new_user = await authServices.changePassword(user_id, new_pass);
+                res.status(200).json();
+            }
         }
     } catch (error) {
         console.log("errors: ",error);
@@ -111,13 +171,18 @@ module.exports.changePassword = async (req, res, next) =>{
 module.exports.deleteUser = async (req, res, next) =>{
     try {
         const {user_id} = req.params;
-        const user = await authServices.deleteUser(user_id);
-        if(user.is_delete==true){
-            res.status(200).json()
+        const valid = await validateDelete(req.params);
+        if(valid.error){
+            console.log(valid.error);
+            res.status(400).json({message: "Parameter incorrect!"});
         }else{
-            res.status(500).json({message: "Cann't delete!"});
+            const user = await authServices.deleteUser(user_id);
+            if(user){
+                res.status(200).json();
+            }else{
+                res.status(400).json({message: "Cann't delete!"});
+            }
         }
-        
     } catch (error) {
         console.log("errors: ",error);
         res.status(500).json(error);
