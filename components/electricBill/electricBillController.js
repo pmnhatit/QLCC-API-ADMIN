@@ -4,6 +4,7 @@ const electricBillServices = require('./electricBillServices');
 const allBillServices = require('../allBill/allBillServices');
 const apartServices = require('../apartment/apartServices');
 const {configs: configsS3, s3} = require('../../services/aws-s3/aws-config');
+const {validateCreateElectricBill,validateImportBill} = require('../../services/validation/validationElectricBill');
 
 //GET
 module.exports.getBillByApartmentId = async (req, res, next) =>{
@@ -51,9 +52,15 @@ module.exports.getBillById = async (req, res, next) =>{
 module.exports.createElectricBill = async (req, res, next) =>{
     try {
         const {apart_id, new_index, month, year} = req.body;
-        const new_bill = await electricBillServices.createElectricBill(apart_id, new_index, month, year);
-        allBillServices.updateElectricBill(new_bill.total_money, apart_id, month, year);
-        res.json({data: new_bill});
+        const valid = await validateCreateElectricBill(req.body);
+        if(valid.error){
+            console.log(valid.error);
+            res.status(400).json({message: "Parameter incorrect!"});
+        }else{
+            const new_bill = await electricBillServices.createElectricBill(apart_id, new_index, month, year);
+            allBillServices.updateElectricBill(new_bill.total_money, apart_id, month, year);
+            res.json({data: new_bill});
+        }
     } catch (error) {
         console.log("errors: ", error);
         res.status(500);

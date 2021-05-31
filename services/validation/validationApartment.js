@@ -21,8 +21,8 @@ exports.validateCreateApartment = async (data) =>{
         area: joi.number().required(),
         direction: joi.string().required(),
         type: joi.string().required(),
-        description: joi.string().required(),
-        images: joi.array().items(joi.string()).required()
+        description: joi.string().allow(""),
+        images: joi.array().items(joi.string().allow(""))
     });
     const valid = await schema.validate(data);
     return valid;
@@ -44,8 +44,8 @@ exports.validateUpdateApartment = async (data) =>{
         direction: joi.string(),
         type: joi.string(),
         status: joi.number().valid(1,2,3),
-        images: joi.array().items(joi.string()),
-        description: joi.string()
+        images: joi.array().items(joi.string().allow("")),
+        description: joi.string().allow("")
     });
     const valid = await schema.validate(data);
     return valid;

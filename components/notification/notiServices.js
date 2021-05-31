@@ -3,11 +3,14 @@ const mongoose = require('mongoose');
 const notiModel = require('./notification');
 const userServices = require('../user/userServices');
 //GET
-module.exports.getAllNotification = async (page, limit)=>{
+module.exports.getAllNotification = async (data, page, limit)=>{
+    const {...query} = data;
+    query.is_delete = false;
     const sk = (page-1)*limit;
     const l = parseInt(limit);
-    const result = await notiModel.find({'is_delete': false},
-        null,{
+    const result = await notiModel.find(query,
+        null,
+        {
             skip: sk,
             limit: l,
             sort: {create_date: -1}
