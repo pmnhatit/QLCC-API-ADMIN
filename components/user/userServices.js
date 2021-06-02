@@ -20,10 +20,10 @@ module.exports.getUserByUsername = async (username) =>{
     const result = await userModel.findOne({'username': username, 'is_delete': false});
     return result;
 }
-module.exports.getUserInactive = async () =>{//chua test
-    const users = await userModel.find({'is_active': false, 'is_delete': false});
-    return users;
-}
+// module.exports.getUserInactive = async () =>{//chua test
+//     const users = await userModel.find({'is_active': false, 'is_delete': false});
+//     return users;
+// }
 module.exports.getTokenDeviceByApartId = async (apart_id) =>{
     const user = await userModel.findOne({'apartment_id': apart_id, 'is_delete': false});
     return user;
@@ -66,15 +66,15 @@ module.exports.updateLicensePlates = async (user_id, license_plates) =>{
     });
     return result;
 }
-module.exports.changeActiveStatus = async (user_id, status) =>{
-    mongoose.set('useFindAndModify', false);
-    const result = await userModel.findOneAndUpdate({'_id': user_id},
-    {'is_active': status},
-    {
-        new: true
-    });
-    return result;
-}
+// module.exports.changeActiveStatus = async (user_id, status) =>{
+//     mongoose.set('useFindAndModify', false);
+//     const result = await userModel.findOneAndUpdate({'_id': user_id},
+//     {'is_active': status},
+//     {
+//         new: true
+//     });
+//     return result;
+// }
 //DELETE
 module.exports.deleteUser = async (user_id) =>{
     mongoose.set('useFindAndModify', false);

@@ -83,20 +83,20 @@ module.exports.getUserById = async (req, res, next) =>{
         res.status(500).json(error);
     }
 }
-module.exports.getUserInactive = async (req, res, next) =>{//chua test
-    try {
-        const users = await userServices.getUserInactive();
-        let result = [];
-        for(let i=0; i<users.length; i++){
-            const user = {id: users[i]._id, name: users[i].name, apart_id: users[i].apartment_id};
-            result.push(user);
-        }
-        res.status(200).json({data: result});
-    } catch (error) {
-        console.log("errors: ", error);
-        res.status(500).json(error);
-    }
-}
+// module.exports.getUserInactive = async (req, res, next) =>{//chua test
+//     try {
+//         const users = await userServices.getUserInactive();
+//         let result = [];
+//         for(let i=0; i<users.length; i++){
+//             const user = {id: users[i]._id, name: users[i].name, apart_id: users[i].apartment_id};
+//             result.push(user);
+//         }
+//         res.status(200).json({data: result});
+//     } catch (error) {
+//         console.log("errors: ", error);
+//         res.status(500).json(error);
+//     }
+// }
 module.exports.getTokenDeviceByApartId = async (req, res, next) =>{
     try {
         const {apart_id} = req.params;
@@ -124,7 +124,7 @@ module.exports.createUser = async (req, res, next) =>{
             const new_user = await userServices.createUser(name, phone, email, identify_card, 
                 native_place, block_id, apartment_id, license_plates);
             if(new_user){
-                const update_apart = await apartServices.updateOwner(apartment_id, new_user._id, true);
+                const update_apart = await apartServices.updateOwner(apartment_id, new_user._id, true, 2);
                 if(update_apart==null){
                     res.status(400).json({message: "Apartment id incorrect!"});
                 }else{
@@ -249,40 +249,45 @@ module.exports.updateLicensePlates = async (req, res, next) =>{
         res.status(500).json(error);
     }
 }
-module.exports.changeActiveStatus = async (req, res, next) =>{
-    try {
-        const {user_id, status} = req.body;
-        if(user_id==undefined || status==undefined){
-            res.status(400).json({message: "Missed parameters"})
-        }else{
-            const user = await userServices.changeActiveStatus(user_id, status);
-            if(user==null){
-                res.status(400).json({message: "User id incorrect"});
-            }else{
-                if(status==false){
-                    for(let i=0; i<user.apartment_id.length; i++){
-                        await apartServices.updateApartStatus(user.apartment_id[i], 4);
-                    }
-                }else{
-                    for(let i=0; i<user.apartment_id.length; i++){
-                        await apartServices.updateApartStatus(user.apartment_id[i], 3);
-                    }
-                }
-                res.status(200).json({data: user});
-            }
-        }
-    } catch (error) {
-        console.log("errors: ", error);
-        res.status(500).json(error);
-    }
-}
+// module.exports.changeActiveStatus = async (req, res, next) =>{
+//     try {
+//         const {user_id, status} = req.body;
+//         if(user_id==undefined || status==undefined){
+//             res.status(400).json({message: "Missed parameters"})
+//         }else{
+//             const user = await userServices.changeActiveStatus(user_id, status);
+//             if(user==null){
+//                 res.status(400).json({message: "User id incorrect"});
+//             }else{
+//                 if(status==false){
+//                     for(let i=0; i<user.apartment_id.length; i++){
+//                         await apartServices.updateApartStatus(user.apartment_id[i], 4);
+//                     }
+//                 }else{
+//                     for(let i=0; i<user.apartment_id.length; i++){
+//                         await apartServices.updateApartStatus(user.apartment_id[i], 3);
+//                     }
+//                 }
+//                 res.status(200).json({data: user});
+//             }
+//         }
+//     } catch (error) {
+//         console.log("errors: ", error);
+//         res.status(500).json(error);
+//     }
+// }
 //DELETE
 module.exports.deleteUser = async (req, res, next) =>{
     try {
         const {user_id} = req.params;
         const user = await userServices.deleteUser(user_id);
-        if(user.is_delete==true){
-            res.status(200).json()
+        if(user){
+            for(let i=0; i<user.apartment_id.length; i++){
+                if(user.apartment_id[i]!=""){
+                    const apart = await apartServices.updateOwner(user.apartment_id[i], "", false, 1);
+                }
+            }
+            res.status(200).json();
         }else{
             res.status(500).json({message: "Cann't delete!"});
         }

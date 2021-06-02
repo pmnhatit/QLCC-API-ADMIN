@@ -8,7 +8,7 @@ router.get('/all', passPort.authenticate('jwt',{session: false}), userController
 
 router.get('/search', passPort.authenticate('jwt',{session: false}), userController.searchByLicensePlate);
 
-router.get('/inactive', passPort.authenticate('jwt',{session: false}), userController.getUserInactive);//chua test
+// router.get('/inactive', passPort.authenticate('jwt',{session: false}), userController.getUserInactive);//chua test
 
 router.get('/token-device/:apart_id', passPort.authenticate('jwt',{session: false}), userController.getTokenDeviceByApartId);
 
@@ -20,7 +20,7 @@ router.put('/update', passPort.authenticate('jwt',{session: false}), userControl
 
 router.put('/update-license-plate', passPort.authenticate('jwt',{session: false}), userController.updateLicensePlates);
 
-router.put('/change-active', passPort.authenticate('jwt',{session: false}), userController.changeActiveStatus);
+// router.put('/change-active', passPort.authenticate('jwt',{session: false}), userController.changeActiveStatus);
 
 router.delete('/delete/:user_id', passPort.authenticate('jwt',{session: false}), userController.deleteUser);
 

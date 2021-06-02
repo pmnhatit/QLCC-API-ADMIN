@@ -47,14 +47,14 @@ module.exports.updateApartment = async (data) =>{
     })
     return new_apart;
 }
-module.exports.updateOwner = async (apart_id, user_id, is_active) =>{
+module.exports.updateOwner = async (apart_id, user_id, is_active, status) =>{
     const owner = {
         id: user_id,
         is_active: is_active
     }
     mongoose.set('useFindAndModify', false);
     const new_apart = await apartmentModel.findByIdAndUpdate({'_id': apart_id, 'is_delete': false},
-    {'owner': owner},
+    {'owner': owner, 'status': status},
     {
         new: true
     })

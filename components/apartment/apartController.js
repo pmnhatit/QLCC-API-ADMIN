@@ -7,14 +7,14 @@ const {validateGetAllApartment,
 //GET
 module.exports.getAllApartment = async (req, res, next) =>{
     try {
-        const valid = await validateGetAllApartment(req.query);
-        if(valid.error){
-            console.log(valid.error);
-            res.status(400).json({message: "Parameter incorrect"});
-        }else{
+        // const valid = await validateGetAllApartment(req.query);
+        // if(valid.error){
+        //     console.log(valid.error);
+        //     res.status(400).json({message: "Parameter incorrect"});
+        // }else{
             const apartments = await apartServices.getAllApartment(req.query);
             res.status(200).json({data: apartments});
-        }
+        // }
     } catch (error) {
         console.log("errors: ", error);
         res.status(500).json(error);
@@ -95,13 +95,13 @@ module.exports.updateApartment = async (req, res, next) =>{
 }
 module.exports.updateOwner = async(req, res, next) =>{
     try {
-        const {apart_id, user_id, is_active} = req.body;
+        const {apart_id, user_id, is_active, status} = req.body;
         const valid = await validateUpdateOwner(req.body);
         if(valid.error){
             console.log(valid.error);
             res.status(400).json({message: "Parameter incorrect!"});
         }else{
-            const apart = await apartServices.updateOwner(apart_id, user_id, is_active);
+            const apart = await apartServices.updateOwner(apart_id, user_id, is_active, status);
             if(apart){
                 res.status(200).json({data: apart});
             }else{

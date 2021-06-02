@@ -33,10 +33,10 @@ var userSchema = new mongoose.Schema({
         type: String,
         default: ""
     },
-    is_active: {//danh dau co su dung app khong
-        type: Boolean,
-        default: true
-    },
+    // is_active: {//danh dau co su dung app khong
+    //     type: Boolean,
+    //     default: true
+    // },
     reset_code: {
         type: String,
         default: ""
