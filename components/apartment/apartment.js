@@ -30,7 +30,7 @@ var apartmentSchema = new mongoose.Schema({
         },
         is_active:{
             type: Boolean,
-            default: true
+            default: false
         }
     },
     description: {

@@ -4,6 +4,8 @@ const otherBillServices = require('./otherBillServices');
 const allBillServices = require('../allBill/allBillServices');
 const apartServices = require('../apartment/apartServices');
 const {configs: configsS3, s3} = require('../../services/aws-s3/aws-config');
+
+const {validateImportBill} = require('../../services/validation/validationOtherBill');
 //GET
 module.exports.getBillByApartmentId = async (req, res, next)=>{
     try {

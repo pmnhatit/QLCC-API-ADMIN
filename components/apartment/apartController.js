@@ -2,7 +2,8 @@ const apartServices = require('./apartServices');
 const {validateGetAllApartment,
     validateCreateApartment,
     validateApartId,
-    validateUpdateApartment} = require('../../services/validation/validationApartment');
+    validateUpdateApartment,
+    validateUpdateOwner} = require('../../services/validation/validationApartment');
 //GET
 module.exports.getAllApartment = async (req, res, next) =>{
     try {
@@ -87,6 +88,26 @@ module.exports.updateApartment = async (req, res, next) =>{
             }
         }
         
+    } catch (error) {
+        console.log("errors: ", error);
+        res.status(500).json(error);
+    }
+}
+module.exports.updateOwner = async(req, res, next) =>{
+    try {
+        const {apart_id, user_id, is_active} = req.body;
+        const valid = await validateUpdateOwner(req.body);
+        if(valid.error){
+            console.log(valid.error);
+            res.status(400).json({message: "Parameter incorrect!"});
+        }else{
+            const apart = await apartServices.updateOwner(apart_id, user_id, is_active);
+            if(apart){
+                res.status(200).json({data: apart});
+            }else{
+                res.status(400).json({message: "Apartment id incorrect!"});
+            }
+        }
     } catch (error) {
         console.log("errors: ", error);
         res.status(500).json(error);

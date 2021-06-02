@@ -47,6 +47,19 @@ module.exports.updateApartment = async (data) =>{
     })
     return new_apart;
 }
+module.exports.updateOwner = async (apart_id, user_id, is_active) =>{
+    const owner = {
+        id: user_id,
+        is_active: is_active
+    }
+    mongoose.set('useFindAndModify', false);
+    const new_apart = await apartmentModel.findByIdAndUpdate({'_id': apart_id, 'is_delete': false},
+    {'owner': owner},
+    {
+        new: true
+    })
+    return new_apart;
+}
 //DELETE
 module.exports.deleteApartment = async (apart_id) =>{
     mongoose.set('useFindAndModify', false);

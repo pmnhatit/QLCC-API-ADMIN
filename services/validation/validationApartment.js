@@ -50,3 +50,12 @@ exports.validateUpdateApartment = async (data) =>{
     const valid = await schema.validate(data);
     return valid;
 }
+exports.validateUpdateOwner = async (data) =>{
+    const schema = joi.object({
+        apart_id: joi.objectId().required(),
+        user_id: joi.objectId().allow("").required(),
+        is_active: joi.boolean().required()
+    });
+    const valid = await schema.validate(data);
+    return valid;
+}

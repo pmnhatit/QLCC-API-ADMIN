@@ -123,34 +123,43 @@ module.exports.createUser = async (req, res, next) =>{
         }else{
             const new_user = await userServices.createUser(name, phone, email, identify_card, 
                 native_place, block_id, apartment_id, license_plates);
-                let aparts = [], blocks = [];
-            for(let j=0; j<new_user.apartment_id.length; j++){
-                const apart = await apartServices.getApartmentById(new_user.apartment_id[j]);
-                aparts.push(apart.name);
+            if(new_user){
+                const update_apart = await apartServices.updateOwner(apartment_id, new_user._id, true);
+                if(update_apart==null){
+                    res.status(400).json({message: "Apartment id incorrect!"});
+                }else{
+                    let aparts = [], blocks = [];
+                    for(let j=0; j<new_user.apartment_id.length; j++){
+                        const apart = await apartServices.getApartmentById(new_user.apartment_id[j]);
+                        aparts.push(apart.name);
+                    }
+                    for(let k=0; k<new_user.block_id.length; k++){
+                        const block = await blockServices.getBlockById(new_user.block_id[k]);
+                        blocks.push(block.name);
+                    }
+                    const data = {
+                        id: new_user._id,
+                        username: new_user.username,
+                        name: new_user.name,
+                        phone: new_user.phone,
+                        email: new_user.email,
+                        identify_card: new_user.identify_card,
+                        native_place: new_user.native_place,
+                        token_device: new_user.token_device,
+                        avatar: new_user.avatar,
+                        apart_id: new_user.apartment_id,
+                        apart_name: aparts,
+                        block_id: new_user.block_id,
+                        block_name: blocks,
+                        license_plates: new_user.license_plates,
+                        is_active: new_user.is_active,
+                        is_delete: new_user.is_delete
+                    }
+                    res.status(200).json({data: data});
+                }
+            }else{
+                res.status(400).json({message: "No user create!"});
             }
-            for(let k=0; k<new_user.block_id.length; k++){
-                const block = await blockServices.getBlockById(new_user.block_id[k]);
-                blocks.push(block.name);
-            }
-            const data = {
-                id: new_user._id,
-                username: new_user.username,
-                name: new_user.name,
-                phone: new_user.phone,
-                email: new_user.email,
-                identify_card: new_user.identify_card,
-                native_place: new_user.native_place,
-                token_device: new_user.token_device,
-                avatar: new_user.avatar,
-                apart_id: new_user.apartment_id,
-                apart_name: aparts,
-                block_id: new_user.block_id,
-                block_name: blocks,
-                license_plates: new_user.license_plates,
-                is_active: new_user.is_active,
-                is_delete: new_user.is_delete
-            }
-            res.status(200).json({data: data});
         }
     } catch (error) {
         console.log("errors: ", error);

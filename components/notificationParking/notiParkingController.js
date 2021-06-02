@@ -1,11 +1,15 @@
 const notiParkingServices = require('./notiParkingServices');
+const {validateCreateNotification,
+    validateObjectId} = require('../../services/validation/validationNotificationParking');
 
 //GET
 module.exports.getNoticeById = async (req, res, next) =>{
     try {
         const {notice_id} = req.params;
-        if(notice_id==undefined){
-            res.status(400).json();
+        const valid = await validateObjectId(req.params);
+        if(valid.error){
+            console.log(valid.error);
+            res.status(400).json({message: "Parameter incorrect"});
         }else{
             const notice = await notiParkingServices.getNoticeById(notice_id);
             res.status(200).json({data: notice});
@@ -46,8 +50,10 @@ module.exports.getNoticesUnconfirm= async (req, res, next) =>{
 module.exports.createNotice = async (req, res, next) =>{
     try {
         const {title, content, user_id} = req.body;
-        if(title==undefined || content==undefined || user_id==undefined){
-            res.status(400).json();
+        const valid = await validateCreateNotification(req.body);
+        if(valid.error){
+            console.log(valid.error);
+            res.status(400).json({message: "Parameter incorrect!"});
         }else{
             const notice = await notiParkingServices.createNotice(user_id, title, content);
             res.status(200).json({data: notice});
@@ -61,11 +67,17 @@ module.exports.createNotice = async (req, res, next) =>{
 module.exports.changeIsRead = async (req, res, next) =>{
     try {
         const {notice_id} = req.body;
-        const notice = await notiParkingServices.changeIsRead(notice_id);
-        if(notice==null){
-            res.status(400).json({message: "Id incorrect"});
+        const valid = await validateObjectId(req.body);
+        if(valid.error){
+            console.log(valid.error);
+            res.status(400).json({message: "Parameter incorrect!"});
         }else{
-            res.status(200).json({data: notice});
+            const notice = await notiParkingServices.changeIsRead(notice_id);
+            if(notice==null){
+                res.status(400).json({message: "Id incorrect"});
+            }else{
+                res.status(200).json({data: notice});
+            }
         }
     } catch (error) {
         console.log("errors: ", error);
@@ -75,11 +87,17 @@ module.exports.changeIsRead = async (req, res, next) =>{
 module.exports.changeIsConfirm = async (req, res, next) =>{
     try {
         const {notice_id} = req.body;
-        const notice = await notiParkingServices.changeIsConfirm(notice_id);
-        if(notice==null){
-            res.status(400).json({message: "Id incorrect"});
+        const valid = await validateObjectId(req.body);
+        if(valid.error){
+            console.log(valid.error);
+            res.status(400).json({message: "Parameter incorrect!"});
         }else{
-            res.status(200).json({data: notice});
+            const notice = await notiParkingServices.changeIsConfirm(notice_id);
+            if(notice==null){
+                res.status(400).json({message: "Id incorrect"});
+            }else{
+                res.status(200).json({data: notice});
+            }
         }
     } catch (error) {
         console.log("errors: ", error);
