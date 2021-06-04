@@ -37,3 +37,14 @@ module.exports.updateService = async (data) =>{
     });
     return result;
 }
+//DELETE
+module.exports.deleteRegisted = async (service_id, user_id, date, term) =>{
+    mongoose.set('useFindAndModify', false);
+    const result = await serviceModel.findOneAndUpdate({'_id': service_id, 'is_delete': false}, 
+    { $pull: { registed: { user_id: user_id, date: date, term: term } } }, 
+    {
+        new: true,
+        multi: true
+    });
+    return result;
+}

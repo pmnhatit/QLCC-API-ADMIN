@@ -12,4 +12,6 @@ router.put('/update-confirm', passPort.authenticate('jwt',{session: false}), reg
 
 router.put('/change-is-read', passPort.authenticate('jwt',{session: false}), registerController.changeIsRead);
 
+router.delete('/delete', passPort.authenticate('jwt',{session: false}), registerController.deleteRegister);
+
 module.exports = router;

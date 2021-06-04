@@ -75,7 +75,7 @@ module.exports.changeIsRead = async (req, res, next) =>{
         }else{
             const post = await postServices.changeIsRead(post_id);
             if(post==null){
-                res.status(400).json({message: "Parameter incorrect"});
+                res.status(400).json({message: "Post id incorrect!"});
             }else{
                 res.status(200).json({data: post});
             }

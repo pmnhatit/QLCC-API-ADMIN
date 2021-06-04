@@ -12,7 +12,11 @@ module.exports.getNoticeById = async (req, res, next) =>{
             res.status(400).json({message: "Parameter incorrect"});
         }else{
             const notice = await notiParkingServices.getNoticeById(notice_id);
-            res.status(200).json({data: notice});
+            if(notice==null){
+                res.status(400).json({message: "Notice id incorrect!"});
+            }else{
+                res.status(200).json({data: notice});
+            }
         }
     } catch (error) {
         console.log("errors: ", error);

@@ -52,3 +52,13 @@ module.exports.updateConfirmRegister = async (register_id, service_id, registed)
         return result;
     }
 }
+//DELETE
+module.exports.deleteRegister = async (register_id) =>{
+    mongoose.set('useFindAndModify', false);
+    const result = await registerServiceModel.findOneAndUpdate({'_id': register_id, 'is_delete': false}, 
+    {'is_delete': true}, 
+    {
+        new: true
+    });
+    return result;
+}

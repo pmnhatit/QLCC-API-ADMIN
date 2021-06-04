@@ -11,5 +11,7 @@ router.post('/create', passPort.authenticate('jwt',{session: false}), serviceCon
 // router.put('/update-registed', passPort.authenticate('jwt',{session: false}), serviceController.updateRegisted);
 
 router.put('/update', passPort.authenticate('jwt',{session: false}), serviceController.updateService);
+//chua test
+router.delete('/delete-registed', passPort.authenticate('jwt',{session: false}), serviceController.deleteRegisted);
 
 module.exports = router;
