@@ -1,6 +1,6 @@
 const joi = require('@hapi/joi');
 joi.objectId = require('joi-objectid')(joi)
-//chua goi
+
 exports.validateCreateElectricBill = async (data) =>{
     const schema = joi.object({
         apart_id: joi.objectId().required(),
