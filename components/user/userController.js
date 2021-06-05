@@ -167,7 +167,7 @@ module.exports.createUser = async (req, res, next) =>{
     }
 }
 //UPDATE
-module.exports.updateApartOfUser = async (req, res, next) =>{//chua test lai
+module.exports.updateApartOfUser = async (req, res, next) =>{
     try {
         const {user_id, apartment_id, block_id} = req.body;
         const user = await userServices.updateApartOfUser(user_id, block_id, apartment_id);
