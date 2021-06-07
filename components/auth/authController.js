@@ -97,7 +97,10 @@ module.exports.updateInfo = async (req, res, next) =>{
             if(user==null){
                 res.status(400).json({message: "Id user incorrect!"});
             }else{
-                res.status(200).json({data: user});
+                const new_user = {_id: user._id, username: user.username, name: user.name, phone: user.phone, 
+                    email: user.email, avatar: user.avatar, token_device: user.token_device, 
+                    role: user.role, is_delete: user.is_delete};
+                res.status(200).json({data: new_user});
             }
         }
     } catch (error) {

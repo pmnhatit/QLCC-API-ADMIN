@@ -17,7 +17,7 @@ module.exports.getUserById = async (user_id) =>{
     return result;
 }
 module.exports.getAllUser = async ()=>{
-    const result = await authModel.find({'role': 1, 'is_delete': false});
+    const result = await authModel.find({'role': 1, 'is_delete': false},{password: 0});
     return result;
 }
 module.exports.getAdmin = async (data) =>{
