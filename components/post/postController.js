@@ -12,6 +12,15 @@ module.exports.getPost = async(req, res, next) =>{
         res.status(500).json(error);
     }
 }
+module.exports.countPost = async(req, res, next) =>{
+    try {
+        const posts = await postServices.getPost(req.query);
+        res.status(200).json({count: posts.length});
+    } catch (error) {
+        console.log("errors: ",error);
+        res.status(500).json(error);
+    }
+}
 //UPDATE
 module.exports.confirmPost = async(req, res, next) =>{
     try {

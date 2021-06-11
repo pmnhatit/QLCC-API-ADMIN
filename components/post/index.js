@@ -6,6 +6,8 @@ const postController = require('./postController');
 
 router.get('/all-post', passPort.authenticate('jwt',{session: false}), postController.getPost);
 
+router.get('/count-post', passPort.authenticate('jwt',{session: false}), postController.countPost);
+
 router.put('/confirm-post', passPort.authenticate('jwt',{session: false}), postController.confirmPost);
 
 router.put('/reject-post', passPort.authenticate('jwt',{session: false}), postController.rejectPost);

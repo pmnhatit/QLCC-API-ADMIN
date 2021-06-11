@@ -16,6 +16,15 @@ module.exports.getRegisterService = async (req, res, next) =>{
         res.status(500).json(error);
     }
 }
+module.exports.countRegisterService = async (req, res, next) =>{
+    try {
+        const registers = await registerService.getRegisterService(req.query);
+        res.status(200).json({count: registers.length});
+    } catch (error) {
+        console.log("errors: ",error);
+        res.status(500).json(error);
+    }
+}
 //CREATE
 module.exports.createRegisterService = async (req, res, next) =>{
     try {

@@ -15,6 +15,10 @@ var authSchema = new mongoose.Schema({
         type: String,
         default: ""
     },
+    token_device_web: {
+        type: String,
+        default: ""
+    },
     token_device: {
         type: String,
         default: ""

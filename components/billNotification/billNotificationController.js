@@ -47,6 +47,15 @@ module.exports.getNotiStopService = async (req, res, next) =>{
         res.status(500).json(error);
     }
 }
+module.exports.countNotices = async (req, res, next) =>{
+    try {
+        const notis = await billNotiServices.getNotices(req.query);
+        res.status(200).json({count: notis.length});
+    } catch (error) {
+        console.log("errors: ", error);
+        res.status(500).json(error);
+    }
+}
 //CREATE
 module.exports.createReminderNotice = async (req, res, next) =>{
     try {

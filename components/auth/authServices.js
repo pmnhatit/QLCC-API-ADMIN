@@ -52,7 +52,7 @@ module.exports.updateInfo = async (user_id, name, phone, email) =>{
     });
     return result;
 }
-module.exports.updateTokenDevice = async (user_id, token_device) =>{
+module.exports.updateTokenDeviceMobile = async (user_id, token_device) =>{
     mongoose.set('useFindAndModify', false);
     const result = await authModel.findOneAndUpdate({'_id': user_id}, 
     {$set:{'token_device': token_device}},
@@ -61,6 +61,15 @@ module.exports.updateTokenDevice = async (user_id, token_device) =>{
     });
     return result;
 } 
+module.exports.updateTokenDeviceWeb = async (user_id, token_device) =>{
+    mongoose.set('useFindAndModify', false);
+    const result = await authModel.findOneAndUpdate({'_id': user_id}, 
+    {$set:{'token_device_web': token_device}},
+    {
+        new: true
+    });
+    return result;
+}
 module.exports.changePassword = async (user_id, password) =>{
     mongoose.set('useFindAndModify', false);
     let hash = bcrypt.hashSync(password, bcrypt.genSaltSync(10));

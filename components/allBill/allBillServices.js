@@ -88,6 +88,12 @@ module.exports.getTotalUnpaidFee = async (month, year) =>{
     const result = {total: total, electric: electric, water: water, other: other};
     return result;
 }
+module.exports.getAllBill = async (data) =>{
+    const {...query} = data;
+    query.is_delete = false;
+    const result = await allBillModel.find(query);
+    return result;
+}
 //CREATE
 //UPDATE
 module.exports.changeIsPay = async (bill_id, status) =>{

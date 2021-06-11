@@ -171,6 +171,15 @@ module.exports.getTotalMoneyInMonth = async (req, res, next) =>{
         res.status(500).json(error);
     }
 }
+module.exports.countAllBill = async (req, res, next) =>{
+    try {
+        const bills = await allBillServices.getAllBill(req.query);
+        res.status(200).json({count: bills.length});
+    } catch (error) {
+        console.log("errors: ",error);
+        res.status(500).json(error);
+    }
+}
 //CREATE
 // module.exports.createBill = async (req, res, next) =>{
 //     try {

@@ -28,7 +28,8 @@ module.exports.login = async (req, res, next) =>{
         const token = jwt.sign(sign, process.env.KEY_SECRET);
         console.log(token);
         const infoUser = {_id: user.id, username: user.username, name: user.name, phone: user.phone, email: user.email, 
-            avatar: user.avatar, role: user.role, token_device: user.token_device, is_delete: user.is_delete};
+            avatar: user.avatar, role: user.role, token_device: user.token_device, 
+            is_delete: user.is_delete, token_device_web: user.token_device_web};
         res.json({token: token, infoUser: infoUser});
     }
 }
@@ -51,7 +52,7 @@ module.exports.createUser = async(req, res , next) => {
                 const token = jwt.sign(payload, jwtOptions.secretOrKey);
                 const infoUser = {_id: newUser._id, username: newUser.username, name: newUser.name, 
                     phone: newUser.phone, email: newUser.email, role: newUser.role, token_device: newUser.token_device, 
-                    avatar: newUser.avatar, is_delete: newUser.is_delete};
+                    avatar: newUser.avatar, is_delete: newUser.is_delete, token_device_web: newUser.token_device_web};
                 res.json({token: token, infoUser: infoUser});
             }
         }
@@ -99,7 +100,7 @@ module.exports.updateInfo = async (req, res, next) =>{
             }else{
                 const new_user = {_id: user._id, username: user.username, name: user.name, phone: user.phone, 
                     email: user.email, avatar: user.avatar, token_device: user.token_device, 
-                    role: user.role, is_delete: user.is_delete};
+                    role: user.role, is_delete: user.is_delete, token_device_web: user.token_device_web};
                 res.status(200).json({data: new_user});
             }
         }
@@ -128,7 +129,7 @@ module.exports.updateAvatar = async (req, res, next) =>{
         res.status(500).json({error});
     }
 }
-module.exports.updateTokenDevice = async (req, res, next) =>{
+module.exports.updateTokenDeviceMobile = async (req, res, next) =>{
     try {
         const {user_id, token_device} = req.body;
         const valid = await validateUpdateTokenDevice(req.body);
@@ -136,11 +137,31 @@ module.exports.updateTokenDevice = async (req, res, next) =>{
             console.log(valid.error);
             res.status(400).json({message: "Parameter incorrect!"});
         }else{
-            const user = await authServices.updateTokenDevice(user_id, token_device);
+            const user = await authServices.updateTokenDeviceMobile(user_id, token_device);
             if(user==null){
                 res.status(400).json({message: "Id user incorrect!"});
             }else{
                 res.status(200).json({data: user.token_device});
+            }
+        }
+    } catch (error) {
+        console.log("errors: ",error);
+        res.status(500).json(error);
+    }
+}
+module.exports.updateTokenDeviceWeb = async (req, res, next) =>{
+    try {
+        const {user_id, token_device} = req.body;
+        const valid = await validateUpdateTokenDevice(req.body);
+        if(valid.error){
+            console.log(valid.error);
+            res.status(400).json({message: "Parameter incorrect!"});
+        }else{
+            const user = await authServices.updateTokenDeviceWeb(user_id, token_device);
+            if(user==null){
+                res.status(400).json({message: "Id user incorrect!"});
+            }else{
+                res.status(200).json({data: user.token_device_web});
             }
         }
     } catch (error) {

@@ -25,6 +25,16 @@ module.exports.getNotiStopService = async (confirm_status) =>{//lay danh sach th
     });
     return result;
 }
+module.exports.getNotices = async (data) =>{
+    const {...query} = data;
+    query.is_delete = false;
+    const result = await billNotiModel.find(query,
+    null,
+    {
+        sort: {create_date: -1}
+    });
+    return result;
+}
 //CREATE
 module.exports.createReminderNotice = async (apart_id, apart_name, month, year, total_money) =>{
     const content = `Theo quy định về thời gian thanh toán tiền điện nước của chung cư trong khoảng thời gian từ ngày 01 đến ngày 05 hàng tháng. Tuy nhiên đến nay đã là mùng 06, quá hạn thanh toán mà căn hộ ${apart_name} vẫn chưa thanh toán. Vậy BQL chung cư yêu cầu chủ căn hộ ${apart_name} thanh toán đầy đủ số tiền điện nước ${month}/${year} là ${total_money} theo quy định. Nếu sau 05 ngày chủ căn hộ chưa thanh toán thi BQL sẽ tiến hành xử lý theo quy định của chung cư.`;

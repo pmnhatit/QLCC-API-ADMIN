@@ -17,7 +17,9 @@ router.put('/update-info', passPort.authenticate('jwt',{session: false}), authCo
 
 router.put('/update-avatar', passPort.authenticate('jwt',{session: false}), authController.updateAvatar);
 
-router.put('/update-token-device', passPort.authenticate('jwt',{session: false}), authController.updateTokenDevice);
+router.put('/update-token-device-mobile', passPort.authenticate('jwt',{session: false}), authController.updateTokenDeviceMobile);
+
+router.put('/update-token-device-web', passPort.authenticate('jwt',{session: false}), authController.updateTokenDeviceWeb);
 
 router.put('/change-pass', passPort.authenticate('jwt',{session: false}), authController.changePassword);
 

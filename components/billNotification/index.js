@@ -8,6 +8,8 @@ router.get('/all/:apart_id', passPort.authenticate('jwt',{session: false}), noti
 
 router.get('/stop-services/:status', passPort.authenticate('jwt',{session: false}), notiController.getNotiStopService);
 
+router.get('/count-notices', passPort.authenticate('jwt',{session: false}), notiController.countNotices);
+
 router.get('/:notice_id', passPort.authenticate('jwt',{session: false}), notiController.getNotiById);
 
 router.post('/create-reminder', passPort.authenticate('jwt',{session: false}), notiController.createReminderNotice);

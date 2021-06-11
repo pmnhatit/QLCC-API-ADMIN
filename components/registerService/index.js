@@ -6,6 +6,8 @@ const registerController = require('./registerServiceController');
 
 router.get('/all-register', passPort.authenticate('jwt',{session: false}), registerController.getRegisterService);
 
+router.get('/count-register', passPort.authenticate('jwt',{session: false}), registerController.countRegisterService);
+
 router.put('/update-reject', passPort.authenticate('jwt',{session: false}), registerController.updateRejectService);
 
 router.put('/update-confirm', passPort.authenticate('jwt',{session: false}), registerController.updateConfirmRegister);
