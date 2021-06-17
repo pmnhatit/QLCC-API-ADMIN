@@ -22,6 +22,6 @@ router.put('/change-pay', passPort.authenticate('jwt',{session: false}), allBill
 
 router.put('/change-report', passPort.authenticate('jwt',{session: false}), allBillController.changeReportStatus);
 
-// router.delete('/delete/:bill_id', passPort.authenticate('jwt',{session: false}), electricBillController.deleteElectricBill);
+router.delete('/delete/:month/:year', passPort.authenticate('jwt',{session: false}), allBillController.deleteMany);
 
 module.exports = router;

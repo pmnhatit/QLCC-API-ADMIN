@@ -245,3 +245,17 @@ module.exports.changeReportStatus = async (req, res, next) =>{
         res.status(500).json(error);
     }
 }
+//DELETE
+module.exports.deleteMany = async (req, res, next) =>{
+    try {
+        const {month, year} = req.params;
+        const result = await allBillServices.deleteMany(month, year);
+        const res1 = elctricBillServices.deleteMany(month, year);
+        const res2 = waterBillServices.deleteMany(month, year);
+        const res3 = otherBillServices.deleteMany(month, year);
+        res.status(200).json();
+    } catch (error) {
+        console.log("errors: ",error);
+        res.status(500).json(error);
+    }
+}

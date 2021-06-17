@@ -12,7 +12,7 @@ router.get('/month-bill/:apart_id/:month/:year', passPort.authenticate('jwt',{se
 
 router.get('/:bill_id', passPort.authenticate('jwt',{session: false}), waterBillController.getBillById);
 
-router.post('/add', passPort.authenticate('jwt',{session: false}), waterBillController.createElectricBill);
+// router.post('/add', passPort.authenticate('jwt',{session: false}), waterBillController.createElectricBill);
 
 router.post('/import-file', passPort.authenticate('jwt',{session: false}), waterBillController.importCSV);
 

@@ -162,11 +162,23 @@ module.exports.changeReportStatus = async (bill_id, status) =>{
     {new: true});
     return result;
 }
+module.exports.updateBillElement = async (data) =>{
+    const {bill_id, ...query} = data;
+    mongoose.set('useFindAndModify', false);
+    const result = await allBillModel.findOneAndUpdate({'_id': bill_id},
+    query,
+    {new: true});
+    return result;
+}
 //DELETE
 module.exports.deleteBill = async (bill_id) =>{
     mongoose.set('useFindAndModify', false);
     const result = await allBillModel.findOneAndUpdate({'id': bill_id},
     {'is_delete': true},
     {new: true});
+    return result;
+}
+module.exports.deleteMany = async (month, year) =>{
+    const result = await allBillModel.deleteMany({'month': month, 'year': year});
     return result;
 }

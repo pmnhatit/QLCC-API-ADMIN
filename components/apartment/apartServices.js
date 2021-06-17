@@ -70,3 +70,8 @@ module.exports.deleteApartment = async (apart_id) =>{
     });
     return result;
 }
+//import
+module.exports.importFile = async(data) =>{
+    const result = await apartmentModel.insertMany(data);
+    return result;
+}

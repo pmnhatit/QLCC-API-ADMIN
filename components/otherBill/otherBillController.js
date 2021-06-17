@@ -49,27 +49,31 @@ module.exports.getBillById = async (req, res, next) =>{
     }
 }
 //CREATE
-module.exports.createOtherBill = async (req, res, next) =>{
-    try {
-        const {apart_id, apart_management, n_motobikes, n_cars, maintenance_fee, 
-            service_charge, other_fees, month, year, note} = req.body;
-        const new_bill = await otherBillServices.createOtherBill(apart_id, apart_management, n_motobikes, n_cars, maintenance_fee, 
-            service_charge, other_fees, month, year, note);
-        allBillServices.updateOtherBill(new_bill.total_money, apart_id, month, year);
-        res.status(200).json({data: new_bill});
-    } catch (error) {
-        console.log("errors: ", error);
-        res.status(500).json(error);
-    }
-}
+// module.exports.createOtherBill = async (req, res, next) =>{
+//     try {
+//         const {apart_id, apart_management, n_motobikes, n_cars, maintenance_fee, 
+//             service_charge, other_fees, month, year, note} = req.body;
+//         const new_bill = await otherBillServices.createOtherBill(apart_id, apart_management, n_motobikes, n_cars, maintenance_fee, 
+//             service_charge, other_fees, month, year, note);
+//         allBillServices.updateOtherBill(new_bill.total_money, apart_id, month, year);
+//         res.status(200).json({data: new_bill});
+//     } catch (error) {
+//         console.log("errors: ", error);
+//         res.status(500).json(error);
+//     }
+// }
 //UPDATE
 module.exports.updateOtherBill = async (req, res, next) =>{
     try {
-        const {bill_id, apart_id, apart_management, n_motobikes, n_cars, maintenance_fee, 
+        const {bill_id, apart_id, apart_management, parking_fees, maintenance_fee, 
             service_charge, other_fees, month, year, note} = req.body;
-        const bill = await otherBillServices.updateOtherBill(bill_id, apart_id, apart_management, n_motobikes, n_cars, 
+        const bill = await otherBillServices.updateOtherBill(bill_id, apart_id, apart_management, parking_fees, 
             maintenance_fee, service_charge, other_fees, month, year, note);
-        res.status(200).json({data: bill});
+        if(bill == null){
+            res.status(400).json({message: "Parameter incorrect"});
+        }else{
+            res.status(200).json({data: bill});
+        }
     } catch (error) {
         console.log("errors: ", error);
         res.status(500).json(error);
@@ -131,7 +135,6 @@ module.exports.importCSV = async (req, res, next) =>{
                 const aparts = await apartServices.getAllApartment(q);
                 for(let i=1; i<csvData.length; i++){
                     const found = aparts.find(apart => apart.name===csvData[i][0]);
-                    console.log(found);
                     if(found){
                         const record = {
                             apart_id: found._id,
@@ -151,7 +154,6 @@ module.exports.importCSV = async (req, res, next) =>{
                     }
                     
                 }
-                console.log("wrong name", wrong_name);
                 if(data.length < csvData.length - 1){
                     res.status(400).json({message: "Incorrect apartment name", names: wrong_name});
                 }else{

@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 
 const otherBillModel = require('./otherBill');
-const unitPriceServices = require('../unitPrice/unitPriceServices');
+const allBillServices = require('../allBill/allBillServices');
+
 //GET
 module.exports.getOtherBillByApartmentId = async (id)=>{
     const result = await otherBillModel.find({'apart_id': id});
@@ -20,33 +21,34 @@ module.exports.getBillById = async (bill_id) =>{
     return result;
 }
 //CREATE
-module.exports.createOtherBill = async (apart_id, apart_management, n_motobikes, n_cars, maintenance_fee, 
-    service_charge, other_fees, month, year, note) =>{
-    const unit_price = await unitPriceServices.getUnitPrice();
-    const parking_fees = n_motobikes*unit_price.moto_fee + n_cars*unit_price.car_fee;
-    const total_money = apart_management + parking_fees + maintenance_fee + service_charge + other_fees;
-    const new_other_bill = new otherBillModel({apart_id, apart_management, parking_fees,
-        maintenance_fee, service_charge, other_fees, total_money, month, year, note});
-    return await new_other_bill.save();
-}
 module.exports.importFile = async(data) =>{
     const result = await otherBillModel.insertMany(data);
     return result;
 }
 //UPDATE
-module.exports.updateOtherBill = async (bill_id, apart_id, apart_management, n_motobikes, n_cars, maintenance_fee, 
+module.exports.updateOtherBill = async (bill_id, apart_id, apart_management, parking_fees, maintenance_fee, 
     service_charge, other_fees, month, year, note)=>{
-    mongoose.set('useFindAndModify', false);
-    const unit_price = await unitPriceServices.getUnitPrice();
-    const parking_fees = n_motobikes*unit_price.moto_fee + n_cars*unit_price.car_fee;
-    const result = await otherBillModel.findOneAndUpdate({'_id': bill_id, 'is_delete': false},
-    {'apart_id': apart_id, 'apart_management': apart_management, 'maintenance_fee': maintenance_fee, 
-    'service_charge': service_charge, 'other_fees': other_fees, 'month': month, 'year': year, 'note': note, 
-    'parking_fees': parking_fees},
-    {
-        new: true
-    });
-    return result;
+    const total_money = apart_management + parking_fees + maintenance_fee + service_charge + other_fees;
+    const all_bill = await allBillServices.getBillOfApartByMonth(apart_id, month, year);
+    if(all_bill){
+        let total = all_bill.total_money - all_bill.other_bill + total_money;
+        const query = {
+            bill_id: all_bill._id,
+            total_money: total,
+            other_bill: total_money
+        }
+        await allBillServices.updateBillElement(query);
+        mongoose.set('useFindAndModify', false);
+        const result = await otherBillModel.findOneAndUpdate({'_id': bill_id},
+        {'apart_management': apart_management, 'maintenance_fee': maintenance_fee, 'total_money': total_money,
+        'service_charge': service_charge, 'other_fees': other_fees, 'note': note, 'parking_fees': parking_fees},
+        {
+            new: true
+        });
+        return result;
+    }else{
+        return null;
+    }
 }
 module.exports.changeIsPay = async (apart_id, month, year, status) =>{
     mongoose.set('useFindAndModify', false);
@@ -63,5 +65,9 @@ module.exports.deleteOtherBill = async (bill_id) =>{
     {
         new: true
     });
+    return result;
+}
+module.exports.deleteMany = async (month, year) =>{
+    const result = await otherBillModel.deleteMany({'month': month, 'year': year});
     return result;
 }
