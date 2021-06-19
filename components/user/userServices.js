@@ -5,7 +5,11 @@ const userModel = require('./user');
 
 //GET
 module.exports.getAllUser = async () =>{
-    const result = await userModel.find({'is_delete': false});
+    const result = await userModel.find({'is_delete': false},
+    {password: 0},
+    {
+        sort: {username: 1}
+    });
     return result;
 }
 module.exports.getUserById = async (user_id) =>{
@@ -87,6 +91,6 @@ module.exports.deleteUser = async (user_id) =>{
 }
 //SEARCH
 module.exports.searchByLicensePlate = async (search) =>{
-    const result = await userModel.find({$text: {$search: search}});
+    const result = await userModel.find({$text: {$search: search}}, { score: { $meta: "textScore" } }).sort({ score: { $meta: "textScore" } });
     return result;
 }

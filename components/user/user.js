@@ -33,10 +33,6 @@ var userSchema = new mongoose.Schema({
         type: String,
         default: ""
     },
-    // is_active: {//danh dau co su dung app khong
-    //     type: Boolean,
-    //     default: true
-    // },
     reset_code: {
         type: String,
         default: ""
@@ -53,9 +49,7 @@ var userSchema = new mongoose.Schema({
     {
         collection: 'user'
     });
-
-    userSchema.index({license_plates: 'text'});
-
+    userSchema.index({'$**': 'text'});
+    
 const user = db.useDb("qlcc").model("user", userSchema);
-
 module.exports = user;
