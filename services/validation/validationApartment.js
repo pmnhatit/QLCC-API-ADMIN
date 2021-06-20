@@ -54,7 +54,8 @@ exports.validateUpdateOwner = async (data) =>{
     const schema = joi.object({
         apart_id: joi.objectId().required(),
         user_id: joi.objectId().allow("").required(),
-        is_active: joi.boolean().required()
+        is_active: joi.boolean().required(),
+        status: joi.number().valid(1,2)
     });
     const valid = await schema.validate(data);
     return valid;
