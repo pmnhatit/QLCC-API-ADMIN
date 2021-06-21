@@ -128,13 +128,23 @@ module.exports.createUser = async (req, res, next) =>{
             if(user){
                 res.status(400).json({message:"user_exists"});
             }else{
-                const new_user = await userServices.createUser(name, phone, email, identify_card, 
-                    native_place, block_id, apartment_id, license_plates);
-                if(new_user){
-                    const update_apart = await apartServices.updateOwner(apartment_id, new_user._id, true, 2);
-                    if(update_apart==null){
-                        res.status(400).json({message: "Apartment id incorrect!"});
-                    }else{
+                const query = {};
+                let wrong_apart = [];
+                const aparts = await apartServices.getAllApartment(query);
+                for(let i=0; i<apartment_id.length; i++){
+                    const found = aparts.find(apart => apart._id==apartment_id[i]);
+                    if(found==null){
+                        const apart_id = apartment_id[i];
+                        wrong_apart.push(apart_id);
+                    }
+                }
+                if(wrong_apart.length==0){
+                    const new_user = await userServices.createUser(name, phone, email, identify_card, 
+                        native_place, block_id, apartment_id, license_plates);
+                    if(new_user){
+                        for(let i=0; i<apartment_id.length; i++){
+                            const update_apart = await apartServices.updateOwner(apartment_id[i], new_user._id, true, 2);
+                        }
                         let aparts = [], blocks = [];
                         for(let j=0; j<new_user.apartment_id.length; j++){
                             const apart = await apartServices.getApartmentById(new_user.apartment_id[j]);
@@ -163,9 +173,11 @@ module.exports.createUser = async (req, res, next) =>{
                             is_delete: new_user.is_delete
                         }
                         res.status(200).json({data: data});
+                    }else{
+                        res.status(400).json({message: "No user create!"});
                     }
                 }else{
-                    res.status(400).json({message: "No user create!"});
+                    res.status(400).json({message: "Apartment id incorrect!"});
                 }
             }
         }
