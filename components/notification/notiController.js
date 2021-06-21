@@ -4,12 +4,23 @@ const apartServices = require('../apartment/apartServices');
 const {validateCreateNotification,
     validateDeleteNotification,
     validateUpdateNotification} = require('../../services/validation/validationNotification');
+const { parseString } = require('fast-csv');
 //GET
 module.exports.getAllNotification = async (req, res, next) =>{
     try {
         const {page, limit} = req.params;
         const result = await notiServices.getAllNotification(req.query, page, limit);
         res.status(200).json({data: result});
+    } catch (error) {
+        console.log("errors: ",error);
+        res.status(500).json(error);
+    }
+}
+module.exports.getNotificationById = async (req, res, next) =>{
+    try {
+        const {noti_id} = req.params;
+        const noti = await notiServices.getNotificationById(noti_id);
+        res.status(200).json({data: noti});
     } catch (error) {
         console.log("errors: ",error);
         res.status(500).json(error);
@@ -25,11 +36,12 @@ module.exports.createNotification = async (req, res, next) =>{
             res.status(400).json({message: "Parameter incorrect!"});
         }else{
             let receivers = [], users, aparts, ids = [];
-            let q = {};
+            let q = {status: 2};
             if(type==="all"){
                 aparts = await apartServices.getAllApartment(q);
             }else if(type==="block"){
-                q = {block: query.block_id};
+                // q = {block: query.block_id};
+                q.block = query.block_id;
                 aparts = await apartServices.getAllApartment(q);
             }else if(type==="floor"){
                 const floor = query.floor;
@@ -49,13 +61,17 @@ module.exports.createNotification = async (req, res, next) =>{
             }
             if(aparts){
                 for(let i=0; i<aparts.length; i++){
-                    if(aparts[i].owner.id != "" && !receivers.includes(aparts[i].owner.id)){
+                    // if(aparts[i].owner.id != "" && !receivers.includes(aparts[i].owner.id)){
+                    const id = aparts[i].owner.id;
+                    let r = receivers.some(i => i.user_id.includes(id));
+                    if(aparts[i].owner.id != "" && !r){
                         const user = {
                             user_id : aparts[i].owner.id
                         }
                         receivers.push(user);
                         ids.push(aparts[i].owner.id);
                     }
+                    
                 }
             }else{
                 const user = {user_id: users._id};

@@ -17,6 +17,10 @@ module.exports.getAllNotification = async (data, page, limit)=>{
         });
     return result;
 }
+module.exports.getNotificationById = async (noti_id) =>{
+    const result = await notiModel.findOne({'_id': noti_id, 'is_delete': false});
+    return result;
+}
 //CREATE
 module.exports.createNotification = async (title, content, image, link, receivers) =>{
     const d = new Date();

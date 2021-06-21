@@ -6,6 +6,8 @@ const notiController = require('./notiController');
 
 router.get('/all/:page/:limit', passPort.authenticate('jwt',{session: false}), notiController.getAllNotification);
 
+router.get('/:noti_id', passPort.authenticate('jwt',{session: false}), notiController.getNotificationById);
+
 router.post('/add', passPort.authenticate('jwt',{session: false}), notiController.createNotification);
 
 router.put('/update', passPort.authenticate('jwt',{session: false}), notiController.updateNotification);
