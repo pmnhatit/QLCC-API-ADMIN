@@ -5,13 +5,12 @@ exports.validateCreateNotification = async (data) =>{
     const schema = joi.object({
         title: joi.string().required(),
         content: joi.string().required(),
-        type: joi.string().valid("all", "block", "floor", "user").required(),
+        type: joi.string().valid("all", "block", "floor", "apart").required(),
         image: joi.string().allow(""),
         link: joi.string().allow(""),
         block_id: joi.objectId(),
         floor: joi.number(),
-        apart_id: joi.objectId(),
-        user_id: joi.objectId()
+        apart_id: joi.objectId()
     });
     const valid = await schema.validate(data);
     return valid;

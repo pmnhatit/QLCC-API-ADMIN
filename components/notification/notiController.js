@@ -35,7 +35,7 @@ module.exports.createNotification = async (req, res, next) =>{
             console.log(valid.error);
             res.status(400).json({message: "Parameter incorrect!"});
         }else{
-            let receivers = [], users, aparts, ids = [];
+            let receivers = [], aparts = [], ids = [];
             let q = {status: 2};
             if(type==="all"){
                 aparts = await apartServices.getAllApartment(q);
@@ -47,42 +47,26 @@ module.exports.createNotification = async (req, res, next) =>{
                 const floor = query.floor;
                 if(floor==1){
                     const floors = [floor, floor+1];
-                    console.log("floors: ", floors);
                     aparts = await apartServices.getApartsByFloor(query.block_id, floors, query.apart_id);
-                    console.log('aparts', aparts);
                 }else{
                     const floors = [floor-1, floor, floor+1];
-                    console.log('floors', floors);
                     aparts = await apartServices.getApartsByFloor(query.block_id, floors, query.apart_id);
-                    console.log('aparts', aparts);
                 }
             }else{
-                users = await userServices.getUserById(query.user_id);
+                aparts[0] = await apartServices.getApartmentById(query.apart_id);
             }
-            if(aparts){
-                for(let i=0; i<aparts.length; i++){
-                    // if(aparts[i].owner.id != "" && !receivers.includes(aparts[i].owner.id)){
-                    const id = aparts[i].owner.id;
-                    let r = receivers.some(i => i.user_id.includes(id));
-                    if(aparts[i].owner.id != "" && !r){
-                        const user = {
-                            user_id : aparts[i].owner.id
-                        }
-                        receivers.push(user);
-                        ids.push(aparts[i].owner.id);
-                    }
-                    
+            console.log(aparts.length);
+            for(let i=0; i<aparts.length; i++){
+                const apart = {
+                    apart_id : aparts[i]._id
                 }
-            }else{
-                const user = {user_id: users._id};
-                receivers.push(user);
-                ids.push(users._id);
+                receivers.push(apart);
+                ids.push(aparts[i].owner.id);
             }
             const tokens_device = await userServices.getTokenDevice(ids);
             const newNoti = await notiServices.createNotification(title, content, image, link, receivers);
             res.status(200).json({data: newNoti, tokens_device: tokens_device});
         }
-        
     } catch (error) {
         console.log("errors: ",error);
         res.status(500).json(error);
