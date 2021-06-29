@@ -4,16 +4,24 @@ const elctricBillServices = require('../electricBill/electricBillServices');
 const waterBillServices = require('../waterBill/waterBillServices');
 const otherBillServices = require('../otherBill/otherBillServices');
 
-const {validateChangeStatus} = require('../../services/validation/validationAllBill');
+const {validateChangeStatus, validateMonthYear} = require('../../services/validation/validationAllBill');
 
 //GET
 module.exports.getAllBillMonth = async (req, res, next) =>{//lay hoa don tat ca can ho trong thang
     try {
         const {month, year} = req.params;
         const bills = await allBillServices.getAllByMonth(month, year);
+        const aparts = await apartServices.getApartsUserInacvtive();
         let data = [];
         for(let i=0; i<bills.length; i++){
             const apart = await apartServices.getApartmentById(bills[i].apart_id);
+            const found = aparts.find(apart => apart._id==bills[i].apart_id);
+            let is_active;
+            if(found){
+                is_active = false;
+            }else{
+                is_active = true;
+            }
             const bill = {
                 id: bills[i]._id,
                 apart_id: bills[i].apart_id,
@@ -27,6 +35,7 @@ module.exports.getAllBillMonth = async (req, res, next) =>{//lay hoa don tat ca 
                 total_money: bills[i].total_money,
                 report: bills[i].report,
                 is_pay: bills[i].is_pay,
+                is_active: is_active,
                 is_delete: bills[i].is_delete
             }
             data.push(bill);
@@ -180,6 +189,27 @@ module.exports.countAllBill = async (req, res, next) =>{
         res.status(500).json(error);
     }
 }
+// module.exports.getAllBilApartInactive = async (req, res, next) =>{
+//     try {
+//         const {month, year} = req.params;
+//         const valid = await validateMonthYear(req.params);
+//         if(valid.error){
+//             console.log(valid.error);
+//             res.status(400).json({message: "Parameter incorrect!"});
+//         }else{
+//             const aparts = await apartServices.getApartsUserInacvtive();
+//             let aparts_id = [];
+//             for(let i=0; i<aparts.length; i++){
+//                 aparts_id.push(aparts[i]._id);
+//             }
+//             const bills = await allBillServices.getAllBillApartInactive(aparts_id, month, year);
+//             res.status(200).json({data: bills});
+//         }
+//     } catch (error) {
+//         console.log("errors: ",error);
+//         res.status(500).json(error);
+//     }
+// }
 //CREATE
 // module.exports.createBill = async (req, res, next) =>{
 //     try {

@@ -16,6 +16,8 @@ router.get('/all-resolved/:month/:year', passPort.authenticate('jwt',{session: f
 
 router.get('/all/:month/:year', passPort.authenticate('jwt',{session: false}), allBillController.getAllBillMonth);
 
+// router.get('/bills-apart-inactive/:month/:year', passPort.authenticate('jwt',{session: false}), allBillController.getAllBilApartInactive);
+
 router.get('/:bill_id', passPort.authenticate('jwt',{session: false}), allBillController.getBillById);
 
 router.put('/change-pay', passPort.authenticate('jwt',{session: false}), allBillController.changeIsPay);

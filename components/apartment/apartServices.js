@@ -31,6 +31,11 @@ module.exports.getApartsByFloor = async (block_id, floor, apart_id) =>{
     const aparts = await apartmentModel.find({'_id': {$ne: apart_id},'block': block_id, 'floor': {$in: floor}, 'status': 2, 'is_delete': false});
     return aparts;
 }
+module.exports.getApartsUserInacvtive = async() =>{
+    const query = {'owner.id': {$ne: ""}, 'owner.is_active': false, 'is_delete': false};
+    const result = await apartmentModel.find(query);
+    return result;
+}
 //CREATE
 module.exports.createApartment = async (name, block, floor, area, direction, type, images, description) =>{
     const new_apart = new apartmentModel({name, block, floor, area, direction, type, images, description});

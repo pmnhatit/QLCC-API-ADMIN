@@ -94,6 +94,11 @@ module.exports.getAllBill = async (data) =>{
     const result = await allBillModel.find(query);
     return result;
 }
+// module.exports.getAllBillApartInactive = async (aparts_id, month, year)=>{
+//     const query = {'apart_id':{$in: aparts_id}, 'month': month, 'year': year, 'is_delete': false};
+//     const result = await allBillModel.find(query);
+//     return result;
+// }
 //CREATE
 //UPDATE
 module.exports.changeIsPay = async (bill_id, status) =>{
